@@ -1,0 +1,32 @@
+{% extends 'books/base.html' %}
+
+
+{% block title %}All{% endblock %}
+
+{% block content %}
+    <div class="row columns">
+        {{ block.super }}
+    </div>
+    <div class="media-body">
+        {%  for book in book_list %}
+            <div class="small-6 columns">
+                <div class="callout">
+                    <h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
+
+										<div class="community-name">
+                        {{ book.description }}
+                    </div>
+										<span class="username">$ {{ book.price }}</span>
+                    <span >by {{ book.seller }} | {{book.date }}</span>
+
+                </div>
+            </div>
+						<div class="media-footer">
+							{% if user.is_authenticated and book.seller == user and not hide_delete %}
+								<a href="{% url 'books:book_edit' book.pk %}" >Edit</a> |<a href="{% url 'books:book_delete' book.pk %}" >Delete</a>
+							{% endif %}
+						</div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

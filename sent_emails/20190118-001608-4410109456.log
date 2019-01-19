@@ -1,0 +1,21 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Please reset your password
+From: webmaster@localhost
+To: test@gmail.com
+Date: Fri, 18 Jan 2019 00:16:08 -0000
+Message-ID: 
+ <154777056818.28757.11278460430606561496@Parisas-MacBook-Pro.local>
+
+
+Hi testuser1,
+
+We've receive a request to reset your password. If you didn't make this request, you can safely ignore this email. Otherwise, click the button below to reset your password.
+
+
+http://localhost:8000/users/reset/Mw/533-b90195116978fe836f59/
+
+
+
+-------------------------------------------------------------------------------

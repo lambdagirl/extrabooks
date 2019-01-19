@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title_tag %}Books | {{ block.super }}{% endblock %}
+
+{% block wrapper_class %}books-wrapper{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <ul class="breadcrumbs">
+        {% block breadcrumbs %}{% endblock %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'books/base.html' %}
+
+
+{% block content%}
+<div class="article-entry">
+	<h2> {{ object.name }}</h2>
+		<p>{{ object.seller }} | {{object.date}}</p>
+		<p>{{ object.isbn }} </p>
+		<p>{{ object.description }}</p>
+		<p>{{ object.price }}</p>
+
+</div>
+
+<p> <a href="{% url 'books:book_edit' book.pk %}"> Edit </a> |
+		<a href="{% url 'books:book_delete' book.pk %}">Delete </a></p>
+<p> Back to <a href="{% url 'books:book_list' %}">All Books </p>
+{% endblock content%}
