@@ -1,1 +1,1 @@
-web: gunicorn extrabooks_app.wsgi --log-file -
+web: gunicorn extrabooks_app.wsgi
