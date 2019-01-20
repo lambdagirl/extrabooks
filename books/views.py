@@ -4,6 +4,9 @@ from django.views.generic.edit import UpdateView,DeleteView,CreateView
 from .models import Book
 from django.urls import reverse_lazy
 from users.models import CustomUser
+from django.shortcuts import render
+from django.db.models import Q
+
 class BookListView(ListView):
     model = Book
     template_name = 'books/book_list.html'
@@ -50,3 +53,9 @@ class BookCreateView(LoginRequiredMixin,CreateView):
     def form_valid(self,form):
         form.instance.seller = self.request.user
         return super().form_valid(form)
+
+def search(request):
+    term = request.GET.get('q')
+    books = Book.objects.filter(
+        Q(name__icontains=term)|Q(description__icontains=term))
+    return render(request, 'books/book_list.html', {'book_list':books})
