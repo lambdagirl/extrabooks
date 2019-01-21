@@ -134,6 +134,6 @@ LOGOUT_REDIRECT_URL = 'books:book_list'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = '#'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
