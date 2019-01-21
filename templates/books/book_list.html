@@ -12,7 +12,7 @@
             <div class="small-6 columns">
                 <div class="callout">
                     <h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
-  by {{book.seller}}
+  by <a href="{% url 'profile' book.seller.pk %}">{{book.seller}}</a>
 										<div class="community-name">
                       {{ book.description }}
                     </div>

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block content%}
+<div class="article-entry">
+	<h2> {{ object.username }}</h2>
+	<p> first name: {{ object.first_name }}</p>
+	<p> last name: {{ object.last_name }}</p>
+	<p>zipcode: {{ object.zip_code }} </p>
+	<p>Date joined:{{ object.date_joined }} </p>
+</div>
+
+
+<div class="row columns">
+		{{ block.super }}
+</div>
+<div class="media-body">
+		{%  for book in book_list %}
+				<div class="small-6 columns">
+						<div class="callout">
+								<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
+by <a href="{% url 'profile' book.seller.pk %}">{{book.seller}}</a>
+								<div class="community-name">
+									{{ book.description }}
+								</div>
+								<span class="username">$ {{ book.price }}</span>
+								<span > {{book.date }}</span>
+
+						</div>
+				</div>
+				<div class="media-footer">
+					{% if user.is_authenticated and book.seller == user %}
+						<a href="{% url 'books:book_edit' book.pk %}" >Edit</a> |<a href="{% url 'books:book_delete' book.pk %}" >Delete</a>
+					{% endif %}
+				</div>
+		{% endfor %}
+</div>
+
+{% if user.is_authenticated and book.seller == user %}
+
+<p> <a href="#"> Edit </a>
+	{% endif %}
+{% endblock content%}

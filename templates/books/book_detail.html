@@ -10,8 +10,10 @@
 		<p>{{ object.price }}</p>
 
 </div>
+{% if user.is_authenticated and book.seller == user %}
 
 <p> <a href="{% url 'books:book_edit' book.pk %}"> Edit </a> |
 		<a href="{% url 'books:book_delete' book.pk %}">Delete </a></p>
+{% endif %}
 <p> Back to <a href="{% url 'books:book_list' %}">All Books </p>
 {% endblock content%}

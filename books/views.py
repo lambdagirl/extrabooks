@@ -9,6 +9,7 @@ from django.db.models import Q
 
 class BookListView(ListView):
     model = Book
+    queryset = model.objects.order_by('-date')
     template_name = 'books/book_list.html'
 
 class MyBookListView(ListView):

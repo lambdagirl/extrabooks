@@ -40,12 +40,11 @@
 				<div class="collapse navbar-collapse" id="navigation-2">
 					<ul class="nav navbar-nav navbar-right">
 						{% if user.is_authenticated %}
-						Hi {{ user.username }}!
+						Hi <a href="{% url 'settings' user.pk %}">{{ user.username }}</a>!
 						<li>
-										<form action="{% url 'books:search' %}" method="GET">
-														<input type="search" name="q"><button type="button" class="btn btn-fill">Search</button>
-										</form>
-
+								<form action="{% url 'books:search' %}" method="GET">
+									<input type="search" name="q"><button type="button" class="btn btn-fill">Search</button>
+								</form>
 							</li>
 						<li><a href="{% url 'books:book_new' %}" class="btn btn-default btn-fill" data-toggle="modal" >Sell Books</a></li>
 						<li><a href="{% url 'books:my_book_list' %}" class="btn btn-warning btn-fill">My Books</a></li>

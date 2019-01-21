@@ -20,6 +20,4 @@ urlpatterns = [
     path('new/', BookCreateView.as_view(), name = 'book_new'),
     path('my_book_list/', MyBookListView.as_view(), name = 'my_book_list'),
     path('search/', search, name = 'search'),
-
-
 ]
