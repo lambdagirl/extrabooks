@@ -7,7 +7,7 @@ from .views import (
     BookDetailView,
     BookCreateView,
     MyBookListView,
-    search
+    search,
     )
 
 app_name = "extrabooks_app"

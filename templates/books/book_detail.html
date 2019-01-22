@@ -8,6 +8,7 @@
 		<p>{{ object.isbn }} </p>
 		<p>{{ object.description }}</p>
 		<p>{{ object.price }}</p>
+		<p><image src =" {{  object.picture.url }} " width="200px" alt="image"></p>
 
 </div>
 {% if user.is_authenticated and book.seller == user %}

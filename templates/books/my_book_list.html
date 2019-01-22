@@ -16,7 +16,8 @@
             <div class="small-6 columns">
                 <div class="callout">
                     <h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
-                    by {{book.seller}}
+                    <p><image src =" {{  book.picture.url }} " width="200px" alt="image"></p>
+
 										<div class="community-name">
                       {{ book.description }}
                     </div>

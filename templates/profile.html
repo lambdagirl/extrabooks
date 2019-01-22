@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 
+
 {% block title %}Profile{% endblock title %}
 
 {% block content%}
 <div class="article-entry">
+	<image src =" {{  object.avatar.url }} " width="128px" height = "128" alt="image">
 	<h2> {{ object.username }}</h2>
 	<p> first name: {{ object.first_name }}</p>
 	<p> last name: {{ object.last_name }}</p>
 	<p>zipcode: {{ object.zip_code }} </p>
 	<p>Date joined:{{ object.date_joined }} </p>
+	<p>Avatar:{{ object.avatar }} </p>
+
 </div>
 
 

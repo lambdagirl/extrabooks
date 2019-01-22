@@ -137,3 +137,6 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+MEDIA_ROOT = os.path.join(STATIC_ROOT, "uploads")
+MEDIA_URL = '/uploads/'

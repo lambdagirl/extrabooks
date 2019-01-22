@@ -6,6 +6,11 @@ from django.urls import reverse_lazy
 from users.models import CustomUser
 from django.shortcuts import render
 from django.db.models import Q
+#from .forms import ImageUploadForm
+
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404
+
 
 class BookListView(ListView):
     model = Book
@@ -36,7 +41,7 @@ class BookDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
 
 class BookUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Book
-    fields = ['name', 'description', 'price']
+    fields = ['name', 'description', 'price', 'picture']
     template_name = 'books/book_edit.html'
     login_url = 'login'
 
@@ -46,7 +51,7 @@ class BookUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
 
 class BookCreateView(LoginRequiredMixin,CreateView):
     model = Book
-    fields = ['name', 'description', 'price', 'isbn']
+    fields = ['name', 'description', 'price', 'isbn' ,'picture']
     template_name = 'books/book_new.html'
     success_url = reverse_lazy('books:book_list')
     login_url = 'login'
@@ -55,8 +60,22 @@ class BookCreateView(LoginRequiredMixin,CreateView):
         form.instance.seller = self.request.user
         return super().form_valid(form)
 
+
+
 def search(request):
     term = request.GET.get('q')
     books = Book.objects.filter(
         Q(name__icontains=term)|Q(description__icontains=term))
     return render(request, 'books/book_list.html', {'book_list':books})
+'''
+def upload_pic(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            book = Book()
+            book.picture = form.cleaned_data['image']
+            book.save()
+            return HttpResponse('image upload success')
+
+    return HttpResponseForbidden('allowed only via POST')
+'''

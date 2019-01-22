@@ -11,10 +11,11 @@ class Book(models.Model):
     description = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
     isbn = models.CharField('ISBN', max_length=13, help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
     #title, description, category, ISBN, price
-    price = models.PositiveIntegerField(help_text='in cents',)
+    price = models.PositiveIntegerField()
     seller = models.ForeignKey(
             get_user_model(),
             on_delete = models.CASCADE,)
+    picture = models.ImageField(upload_to = 'pic_folder/')
 
     def __str__(self) -> str:
         return self.name
