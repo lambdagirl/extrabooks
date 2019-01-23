@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static  %}
+{% block content %}
+<br>
+{% if sub_categories %}
+    <h3>Sub Categories</h3>
+    {% for i in sub_categories %}
+        <a href="{{ i.slug }}"> {{ i.name }} </a>
+    {% endfor %}
+{% endif %}
+
+<div class="row small-up-1 medium-up-3" >
+{% if book %}
+{% for i in book_list %}
+    <div class="columns">
+        <div class=" card-article-hover card">
+          <a href="{{ i.slug }}">
+            <img  src="{{ i.picture.url }}">
+          </a>
+          <div class="card-section">
+            <a href="{{ i.slug }}">
+              <h6 class="article-title">{{ i.name | truncatechars:30}}</h6>
+            </a>
+          </div>
+          <div class="card-divider flex-container align-middle">
+            <a href="" class="author">{{ i.seller.username }}</a>
+          </div>
+          <div class="hover-border">
+          </div>
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+</div>
+{% endblock %}

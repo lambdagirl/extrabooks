@@ -1,6 +1,5 @@
 
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
@@ -20,7 +19,7 @@ class SignUpView(CreateView):
 
 class EditProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = CustomUser
-    fields = ['username', 'zip_code', 'first_name','last_name', 'avatar']
+    fields = ['username', 'zip_code', 'first_name','last_name', 'avatar',]
     template_name = 'settings.html'
     login_url = 'login'
 

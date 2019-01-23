@@ -12,4 +12,5 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = CustomUser
     list_display = ['email', 'username', 'zip_code', 'is_staff','avatar']
+
 admin.site.register(CustomUser,CustomUserAdmin)

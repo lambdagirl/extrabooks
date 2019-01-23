@@ -61,21 +61,8 @@ class BookCreateView(LoginRequiredMixin,CreateView):
         return super().form_valid(form)
 
 
-
 def search(request):
     term = request.GET.get('q')
     books = Book.objects.filter(
         Q(name__icontains=term)|Q(description__icontains=term))
     return render(request, 'books/book_list.html', {'book_list':books})
-'''
-def upload_pic(request):
-    if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            book = Book()
-            book.picture = form.cleaned_data['image']
-            book.save()
-            return HttpResponse('image upload success')
-
-    return HttpResponseForbidden('allowed only via POST')
-'''

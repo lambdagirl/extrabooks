@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.conf.urls import url
 
 from .views import (
     BookListView,
@@ -20,4 +21,6 @@ urlpatterns = [
     path('new/', BookCreateView.as_view(), name = 'book_new'),
     path('my_book_list/', MyBookListView.as_view(), name = 'my_book_list'),
     path('search/', search, name = 'search'),
+    #path('category/<slug>/', show_category, name='category'),
+
 ]
