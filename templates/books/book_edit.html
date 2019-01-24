@@ -4,6 +4,8 @@
 	<h1> Edit </h1>
 	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 		{{ form.as_p }}
+		<p><image src =" {{  object.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+
 		<button class = "btn" type = "submit" >Update</button>
 	</form>
 {% endblock content%}

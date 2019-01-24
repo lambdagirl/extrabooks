@@ -4,45 +4,56 @@
 {% block title %}Profile{% endblock title %}
 
 {% block content%}
-<div class="article-entry">
-	<image src =" {{  object.avatar.url }} " width="128px" height = "128" alt="image">
-	<h2> {{ object.username }}</h2>
-	<p> first name: {{ object.first_name }}</p>
-	<p> last name: {{ object.last_name }}</p>
-	<p>zipcode: {{ object.zip_code }} </p>
-	<p>Date joined:{{ object.date_joined }} </p>
-	<p>Avatar:{{ object.avatar }} </p>
+<div class="wrapper">
+			 <div class="profile-background">
+					 <div class="filter-black"></div>
+			 </div>
+			 <div class="profile-content section-nude">
+					 <div class="container">
+									 <div class="col-sm-3 col-md-6 col-lg-6">
+											 <div class="avatar">
+												 <image src =" {{  object.avatar.url }} " width="128px" height = "128" alt="Circle Image" class="img-circle img-no-padding ">
+												</div>
+												<div class="name">
+													<h4> {{ object.username }}<br /><small>{{ object.first_name }}</h4>
+														<p>zipcode: {{ object.zip_code }} </p>
+														<p>Date joined:{{ object.date_joined }} </p>
 
-</div>
+										</div>
 
+										{% if user.is_authenticated and book.seller == user %}
+									<button class="btn"><i class="fa fa-cog"></i> Settings</button>
+									{% endif %}
+									</div>
 
-<div class="row columns">
-		{{ block.super }}
-</div>
-<div class="media-body">
-		{%  for book in book_list %}
-				<div class="small-6 columns">
-						<div class="callout">
-								<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
-by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
-								<div class="community-name">
-									{{ book.description }}
+									<div class="row">
+										<div class="col-sm-6 col-md-6 col-lg-6 ">
+											{{ block.super }}
+											{%  for book in book_list %}
+										<div class="callout">
+											<div class="col-sm-6 col-md-6 col-lg-6">
+											<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
+											by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
+											<div class="community-name">
+												{{ book.description }}
+											</div>
+											<span class="username">$ {{ book.price }}</span>
+											<span > {{book.date }}</span>
+											{% if user.is_authenticated and book.seller == user %}
+											<p><a href="{% url 'books:book_edit' book.pk %}" >Edit</a>
+												 |<a href="{% url 'books:book_delete' book.pk %}" >Delete</a></p>
+												 <p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+
+											{% endif %}
+										</div>
+										{% endfor %}
+
+									</div>
 								</div>
-								<span class="username">$ {{ book.price }}</span>
-								<span > {{book.date }}</span>
-
+							</div>
 						</div>
-				</div>
-				<div class="media-footer">
-					{% if user.is_authenticated and book.seller == user %}
-						<a href="{% url 'books:book_edit' book.pk %}" >Edit</a> |<a href="{% url 'books:book_delete' book.pk %}" >Delete</a>
-					{% endif %}
-				</div>
-		{% endfor %}
-</div>
 
-{% if user.is_authenticated and book.seller == user %}
+					</div>
 
-<p> <a href="#"> Edit </a>
-	{% endif %}
+
 {% endblock content%}

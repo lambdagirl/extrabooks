@@ -19,15 +19,11 @@
 										<span class="username">$ {{ book.price }}</span>
 
                     <span > {{book.date }}</span>
-                    <p><image src =" {{  book.picture.url }} " width="200px" alt="image"></p>
+                    <p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
 
                 </div>
             </div>
-						<div class="media-footer">
-							{% if user.is_authenticated and book.seller == user %}
-								<a href="{% url 'books:book_edit' book.pk %}" >Edit</a> |<a href="{% url 'books:book_delete' book.pk %}" >Delete</a>
-							{% endif %}
-						</div>
+
         {% endfor %}
     </div>
 

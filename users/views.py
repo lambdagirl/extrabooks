@@ -17,6 +17,11 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+    def form_valid(self, form):
+         user = self.request.user
+         form.instance.user = user
+         return super(SignUpView, self).form_valid(form)
+
 class EditProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = CustomUser
     fields = ['username', 'zip_code', 'first_name','last_name', 'avatar', ]
