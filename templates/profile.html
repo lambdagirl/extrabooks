@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
 
 {% block title %}Profile{% endblock title %}
 
@@ -17,7 +18,8 @@
 												<div class="name">
 													<h4> {{ object.username }}<br /><small>{{ object.first_name }}</h4>
 														<p>zipcode: {{ object.zip_code }} </p>
-														<p>Date joined:{{ object.date_joined }} </p>
+														<p>city:{{object.get_usercity}}</p>
+														<p>Date joined:{{ object.date_joined|naturalday }} </p>
 
 										</div>
 
@@ -32,17 +34,18 @@
 											{%  for book in book_list %}
 										<div class="callout">
 											<div class="col-sm-6 col-md-6 col-lg-6">
+												<p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+
 											<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
 											by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
 											<div class="community-name">
-												{{ book.description }}
+												{{ book.description|truncatechars:100 }}
 											</div>
 											<span class="username">$ {{ book.price }}</span>
-											<span > {{book.date }}</span>
+											<span > {{book.date|naturaltime}}</span>
 											{% if user.is_authenticated and book.seller == user %}
 											<p><a href="{% url 'books:book_edit' book.pk %}" >Edit</a>
 												 |<a href="{% url 'books:book_delete' book.pk %}" >Delete</a></p>
-												 <p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
 
 											{% endif %}
 										</div>

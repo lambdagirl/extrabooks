@@ -14,6 +14,7 @@ def user_directory_path(instance, filename):
     return os.path.join(str(instance.id), "avatar", filename)
 
 class CustomUser(AbstractUser):
+
     zip_code = models.CharField( max_length=5, blank = False)
     avatar = models.ImageField(upload_to = user_directory_path,
                                 verbose_name= 'profile_pic',
@@ -28,7 +29,7 @@ class CustomUser(AbstractUser):
         return self.username
 
     def get_absolute_url(self):
-        return reverse('profile', args =[str(self.id)])
+        return reverse('profile', args =[str(self.slug)])
 
 
 '''    def save(self, *args, **kwargs):

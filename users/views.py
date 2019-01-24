@@ -22,11 +22,14 @@ class SignUpView(CreateView):
          form.instance.user = user
          return super(SignUpView, self).form_valid(form)
 
+
+
 class EditProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = CustomUser
     fields = ['username', 'zip_code', 'first_name','last_name', 'avatar', ]
     template_name = 'settings.html'
     login_url = 'login'
+
 
     def test_func(self):
         obj = self.get_object()

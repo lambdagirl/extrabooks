@@ -1,5 +1,6 @@
 {% extends 'books/base.html' %}
-
+{% load humanize %}
+{% load static from staticfiles %}
 
 {% block title %}All{% endblock %}
 
@@ -9,21 +10,21 @@
     </div>
     <div class="media-body">
         {%  for book in book_list %}
+        <div class="col-sm-4 col-md-3 col-lg-2">
             <div class="small-6 columns">
                 <div class="callout">
-                    <h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name }}</a></h5>
+                  <p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+
+                    <h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name|truncatechars:23 }}</a></h5>
   by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
-										<div class="community-name">
-                      {{ book.description }}
-                    </div>
+
 										<span class="username">$ {{ book.price }}</span>
 
-                    <span > {{book.date }}</span>
-                    <p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+                    <p > {{book.date|naturaltime }}</p>
 
                 </div>
             </div>
-
+          </div>
         {% endfor %}
     </div>
 

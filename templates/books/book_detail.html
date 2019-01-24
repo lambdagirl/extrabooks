@@ -1,16 +1,17 @@
 {% extends 'books/base.html' %}
+{% load humanize %}
 
 
 {% block content%}
 <div class="article-entry">
+	<p><image src =" {{  object.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
 
 		<h2> {{ object.name }}</h2>
-		<p>{{ object.seller }}</p>
-		<p> Posted at {{object.date}} in
+		by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
+		<p> Posted at {{object.date|naturaltime}} in
 		<p>{{ object.isbn }} </p>
 		<p>{{ object.description }}</p>
-		<p>{{ object.price }}</p>
-		<p><image src =" {{  object.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+		<p>{{ object.price }}</p>s
 
 </div>
 
