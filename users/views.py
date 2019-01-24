@@ -19,7 +19,7 @@ class SignUpView(CreateView):
 
 class EditProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = CustomUser
-    fields = ['username', 'zip_code', 'first_name','last_name', 'avatar',]
+    fields = ['username', 'zip_code', 'first_name','last_name', 'avatar', ]
     template_name = 'settings.html'
     login_url = 'login'
 
@@ -27,18 +27,7 @@ class EditProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         obj = self.get_object()
         print(obj)
         return  obj == self.request.user
-'''
-    def form_valid(self, form):
-        profile_image = CustomUser.avatar(
-            image=self.get_form_kwargs().get('files')['image'])
-        profile_image.save()
-        self.id = profile_image.id
 
-        return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        return reverse('profile', kwargs={'pk': self.id})
-'''
 class ProfieView(DetailView):
     model = CustomUser
     template_name = 'profile.html'

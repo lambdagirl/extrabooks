@@ -40,7 +40,7 @@
 				<div class="collapse navbar-collapse" id="navigation-2">
 					<ul class="nav navbar-nav navbar-right">
 						{% if user.is_authenticated %}
-						Hi <a href="{% url 'settings' user.pk %}">{{ user.username }}</a>!
+						Hi <a href="{% url 'settings' user.slug %}">{{ user.username }}</a>!
 						<li>
 								<form action="{% url 'books:search' %}" method="GET">
 									<input type="search" name="q"><button type="button" class="btn btn-fill">Search</button>

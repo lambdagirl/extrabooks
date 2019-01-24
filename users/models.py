@@ -18,6 +18,11 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to = user_directory_path,
                                 verbose_name= 'profile_pic',
                                 default = 'None/no-img.jpg')
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.username)
+        super(CustomUser, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.username
