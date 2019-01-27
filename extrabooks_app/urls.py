@@ -25,6 +25,7 @@ urlpatterns = [
     path('users/', include('django.contrib.auth.urls')),
     path('books/', include('books.urls', namespace="books")),
     path('',include('books.urls', namespace="books")),
+
 ]
 
 if settings.DEBUG:

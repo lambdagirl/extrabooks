@@ -56,7 +56,6 @@
 						<li><a href="{% url 'login' %}" class="btn btn-simple">Log in</a></li>
 						<li><a href="{% url 'signup' %}" class="btn btn-simple">Sign up</a></li>
 						{% endif %}
-
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-->
@@ -79,5 +78,25 @@
 			<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
 
 			<script src="{% static 'js/ct-paper.js' %}"></script>
+			<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+			<script>
+				var csrftoken = Cookies.get('csrftoken');
+				function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+					    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+					}
+							$(document).ajaxSend(function(event, xhr, settings) {
+					    if (!csrfSafeMethod(settings.type) && !settings.crossDomain) {
+					        xhr.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+					    }
+					});
+			</script>
+				<script>
+				$(document).ready(function(){
+					{% block domready %}
+					{% endblock %}
+				});
+				</script>
 		</body>
 	</html>

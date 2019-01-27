@@ -4,9 +4,6 @@ from django.urls import reverse
 from django.utils.text import slugify
 import uuid, os
 
-# Create your models here.
-
-
 def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
@@ -32,7 +29,14 @@ class CustomUser(AbstractUser):
         return reverse('profile', args =[str(self.slug)])
 
 
-'''    def save(self, *args, **kwargs):
-        self.slug = slugify(self.username)
-        super(CustomUser, self).save(*args, **kwargs)
-'''
+class Contact(models.Model):
+	from_user = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="from_user")
+	to_user = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="to_user")
+
+CustomUser.add_to_class(
+    'following',
+    models.ManyToManyField(
+        'self',
+        through=Contact,
+        related_name='followers',
+        symmetrical=False))

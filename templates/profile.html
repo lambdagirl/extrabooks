@@ -22,11 +22,31 @@
 														<p>Date joined:{{ object.date_joined|naturalday }} </p>
 
 										</div>
-
-										{% if user.is_authenticated and book.seller == user %}
-									<button class="btn"><i class="fa fa-cog"></i> Settings</button>
+										{% if user.is_authenticated and object == user %}
+										<a href="{% url 'settings' user.slug %}"><button class="btn"><i class="fa fa-cog"></i> Settings</button> </a>
 									{% endif %}
+									<div>
+										{% if user.is_authenticated and object != user %}
+
+										{% with total_followers=object.followers.count total_follows=object.from_user.count %}
+
+										<span>
+											<p><span id="js-total-followers">{{total_followers}}</span>
+											Follower{{total_followers|pluralize}}</p>
+										</span>
+											<p>{{total_follows}}
+											Following</p>
+										<a href="#" class="btn follow" data-id = "{{object.id}}" data-action="{% if user in object.followers.all %}un{% endif %}follow">
+											{% if user not in object.followers.all %}
+												Follow
+											{% else %}
+												Unfollow
+											{% endif %}
+										</a>
+										{% endwith %}
+										{% endif %}
 									</div>
+								</div>
 
 									<div class="row">
 										<div class="col-sm-6 col-md-6 col-lg-6 ">
@@ -57,6 +77,34 @@
 						</div>
 
 					</div>
+</div>
 
+{% endblock content %}
 
-{% endblock content%}
+{% block domready %}
+
+	$('a.follow').click(function(e){
+		e.preventDefault();
+		$.post('{% url "user_follow" %}',
+		{
+				id:$(this).data('id'),
+				action: $(this).data('action')
+		},
+		function(data){
+			if (data['status'] == 'ok')
+			{
+				var previous_action = $('a.follow').data('action');
+				// toggle data-action
+				$('a.follow').data('action', previous_action =='follow' ? 'unfollow': 'follow');
+				// toggle link text
+				$('a.follow').text( previous_action =='follow' ? 'Unfollow':'Follow');
+
+				// update total followers
+				const totalFollowerDOM = $('#js-total-followers');
+				var previous_followers = parseInt(totalFollowerDOM.text());
+				totalFollowerDOM.text(previous_action =='follow' ? previous_followers
+				 + 1 : previous_followers -1);
+			}
+		});
+	});
+{% endblock%}

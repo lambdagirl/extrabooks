@@ -9,6 +9,7 @@ from .views import (
     BookCreateView,
     MyBookListView,
     search,
+    BookListbyCategoryView,
     )
 
 app_name = "extrabooks_app"
@@ -21,6 +22,5 @@ urlpatterns = [
     path('new/', BookCreateView.as_view(), name = 'book_new'),
     path('my_book_list/', MyBookListView.as_view(), name = 'my_book_list'),
     path('search/', search, name = 'search'),
-    #path('category/<slug>/', show_category, name='category'),
-
+    path('explore/<int:pk>/', BookListbyCategoryView.as_view(), name='explore'),
 ]
