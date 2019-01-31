@@ -9,7 +9,7 @@ class SavedBooks(models.Model):
     books_saved = models.ForeignKey(Book, on_delete = models.CASCADE)
     create_at = models.DateTimeField(auto_now_add = True)
 
-    slug = models.SlugField(unique=True)
+    #slug = models.SlugField(unique=True)
 
 
     def save(self, *args, **kwargs):
