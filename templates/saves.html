@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+
+{% block title %}Saved{% endblock %}
+
+{% block content %}
+<div class="media-body">
+	{{user}}
+	{{object.books_saved}}
+	{{books_saved_list}}
+
+	<div class="row columns">
+			{{ block.super }}
+	</div>
+
+	{{object.save_by_user}}
+
+		{%  for book in books_saved %}
+		<div class="col-sm-4 col-md-3 col-lg-2">
+				<div class="small-6 columns">
+						<div class="callout">
+							<p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+
+								<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name|truncatechars:23 }}</a></h5>
+by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
+
+								<span class="username">$ {{ book.price }}</span>
+
+								<p > {{book.date|naturaltime }}</p>
+
+						</div>
+				</div>
+			</div>
+		{% endfor %}
+</div>
+
+{% endblock %}

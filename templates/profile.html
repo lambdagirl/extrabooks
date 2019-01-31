@@ -20,7 +20,6 @@
 														<p>zipcode: {{ object.zip_code }} </p>
 														<p>city:{{object.get_usercity}}</p>
 														<p>Date joined:{{ object.date_joined|naturalday }} </p>
-
 										</div>
 										{% if user.is_authenticated and object == user %}
 										<a href="{% url 'settings' user.slug %}"><button class="btn"><i class="fa fa-cog"></i> Settings</button> </a>
@@ -31,11 +30,16 @@
 										{% with total_followers=object.followers.count total_follows=object.from_user.count %}
 
 										<span>
-											<p><span id="js-total-followers">{{total_followers}}</span>
-											Follower{{total_followers|pluralize}}</p>
+											<div class="row" id="modals">
+				<!-- Button trigger modal, modals must be placed outside the global wrapper -->
+											<h5 id="js-total-followers" data-toggle="modal" data-target="#myfollowersModal">{{total_followers}}
+											Follower{{total_followers|pluralize}}</h5>
 										</span>
-											<p>{{total_follows}}
-											Following</p>
+
+											<h5 data-toggle="modal" data-target="#myfollowingModal">{{total_follows}}
+											Following</h5>
+										</div>
+
 										<a href="#" class="btn follow" data-id = "{{object.id}}" data-action="{% if user in object.followers.all %}un{% endif %}follow">
 											{% if user not in object.followers.all %}
 												Follow
@@ -50,6 +54,7 @@
 
 									<div class="row">
 										<div class="col-sm-6 col-md-6 col-lg-6 ">
+											<h4> {{book_list|length}} books for sale</h4>
 											{{ block.super }}
 											{%  for book in book_list %}
 										<div class="callout">
@@ -78,7 +83,57 @@
 
 					</div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="myfollowersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">{{object.followers.all|length}}Followers</h4>
+      </div>
+      <div class="list-unstyled follows">
 
+        {%for follower in object.followers.all%}
+				<div id="my-tab-content" class="tab-content">
+                        <div class="tab-pane active" id="follows">
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <ul class="list-unstyled follows">
+                                        <li>
+                                            <div class="row">
+																							<div class="col-md-2 col-md-offset-0 col-xs-3 col-xs-offset-2">
+																								<image src =" {{  follower.avatar.url }} " width="50px" height="50px" alt="Circle Image" class="img-circle img-no-padding ">
+																								</div>
+																							<div class="col-md-7 col-xs-4">
+																									<h6>{{follower}}<br>
+																										<small>{{follower.zip_code}}<small>
+																										</h6>
+																								</div>
+																								<div class="col-md-3 col-xs-2">
+																									<a href="#" class="btn follow" data-id = "{{follower.id}}" data-action="{% if user in follower.followers.all %}un{% endif %}follow">
+																											{% if user not in follower.followers.all %}
+																												Follow
+																											{% else %}
+																												Unfollow
+																											{% endif %}
+																										</a>
+																									</div>
+																								</div>
+																							</div>
+																						</li>
+																					</ul>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+							{%endfor%}
+
+				</div>
+    </div>
+  </div>
+</div>
+
+<!--    end modal -->
 {% endblock content %}
 
 {% block domready %}

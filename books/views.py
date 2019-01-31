@@ -8,16 +8,24 @@ from django.shortcuts import render
 from django.db.models import Q
 #from .forms import ImageUploadForm
 from django.http import Http404
-
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-
+from taggit.models import Tag
 
 class BookListView(ListView):
     model = Book
+    tag = None
     queryset = model.objects.order_by('-date')
     select_related = ("seller", "category")
     template_name = 'books/book_list.html'
+
+def book_list_by_tag(request,tag_slug=None):
+    tag = None
+    print(tag_slug)
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    book_list = Book.objects.filter(tags__in=[tag])
+    return render(request, 'books/book_list.html', {'book_list':book_list,
+                                                'tag':tag})
 
 class MyBookListView(ListView):
     model = Book

@@ -9,6 +9,9 @@
         {{ block.super }}
     </div>
     <div class="media-body">
+        {% if tag %}
+          <h2> Posts tagged with "{{tag}}"</h2>
+        {% endif %}
         {%  for book in book_list %}
         <div class="col-sm-4 col-md-3 col-lg-2">
             <div class="small-6 columns">
@@ -19,9 +22,16 @@
   by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
 
 										<span class="username">$ {{ book.price }}</span>
-
                     <p > {{book.date|naturaltime }}</p>
-
+                    {% for tag in book.tags.all %}
+                    <p class ="label label-danger">
+                      <a href="{% url 'books:book_list_by_tag' tag.slug %}">
+                        {{ tag.name }}
+                      </a>
+                    </p>
+                      {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </p>
                 </div>
             </div>
           </div>

@@ -37,11 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'taggit',
     'crispy_forms',
     'whitenoise.runserver_nostatic',
-    'django.contrib.humanize',
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
+    'saves.apps.SavesConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -135,7 +138,7 @@ LOGOUT_REDIRECT_URL = 'books:book_list'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

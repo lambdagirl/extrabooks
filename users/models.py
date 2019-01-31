@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.utils.text import slugify
 import uuid, os
+#from books.models import Books
 
 def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]

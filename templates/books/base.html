@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
 
 {% block title_tag %}Books | {{ block.super }}{% endblock %}
 
 {% block wrapper_class %}books-wrapper{% endblock %}
+<link rel="stylesheet" href="{% static 'css/books.css' %}">
 
 {% block content %}
     {{ block.super }}

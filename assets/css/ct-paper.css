@@ -2415,7 +2415,6 @@ textarea.form-control {
 }
 
 .carousel-inner {
-  background-color: #d6d2cc;
 }
 
 .carousel-inner > .item {
@@ -3122,11 +3121,11 @@ textarea.form-control {
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-/*  
+/*
  *
  *   SCSS by Creative Tim
  *   http://www.creative-tim.com
- *   
+ *
  */
 .datepicker {
   top: 0;

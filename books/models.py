@@ -3,6 +3,7 @@ import uuid, os
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from taggit.managers import TaggableManager
 # Create your models here.
 class Category(models.Model): # The Category table name that inherits models.Model
     name = models.CharField(max_length=100) #Like a varchar
@@ -36,6 +37,7 @@ class Book(models.Model):
                                 verbose_name= 'book_pic',
                                 default = 'None/no-img.jpg'
                                 )
+    tags= TaggableManager()
 
     def get_absolute_url(self):
         return reverse('books:book_detail', args =[str(self.id)])

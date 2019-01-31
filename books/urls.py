@@ -10,12 +10,14 @@ from .views import (
     MyBookListView,
     search,
     BookListbyCategoryView,
+    book_list_by_tag,
     )
 
 app_name = "extrabooks_app"
 
 urlpatterns = [
     path('', BookListView.as_view(), name ='book_list'),
+    path('tag/<slug:tag_slug>/',book_list_by_tag, name='book_list_by_tag' ),
     path('<int:pk>/edit/', BookUpdateView.as_view(), name = 'book_edit'),
     path('<int:pk>/delete/', BookDeleteView.as_view(), name = 'book_delete'),
     path('<int:pk>/', BookDetailView.as_view(), name = 'book_detail'),

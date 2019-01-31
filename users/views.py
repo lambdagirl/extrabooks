@@ -73,3 +73,16 @@ def user_follow(request):
         except CustomUser.DoesNotExist:
             return JsonResponse({'status':'ko'})
         return JsonResponse({'status':'ko'})
+'''
+class FollowersView(ListView):
+    model = CustomUser
+    template_name = 'profile/followers.html'
+
+    def get_profile_followers(user):
+        return user.followers.all().select_related('follower')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["follower_list"] = get_profile_followers(self.object) # self.object is user profile
+        return context
+'''
