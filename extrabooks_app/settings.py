@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'taggit',
     'crispy_forms',
+    'isbntools',
     'whitenoise.runserver_nostatic',
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
@@ -72,6 +73,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+        'libraries':{
+            'book_tags':'books.templatetags.book_tags',
+        }
         },
     },
 ]

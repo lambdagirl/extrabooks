@@ -11,6 +11,10 @@ from .views import (
     search,
     BookListbyCategoryView,
     book_list_by_tag,
+    book_list_category,
+    #BookCreateByISBNView,
+    book_create_by_ISBN,
+    book_create_by_ISBN_2,
     )
 
 app_name = "extrabooks_app"
@@ -24,5 +28,9 @@ urlpatterns = [
     path('new/', BookCreateView.as_view(), name = 'book_new'),
     path('my_book_list/', MyBookListView.as_view(), name = 'my_book_list'),
     path('search/', search, name = 'search'),
-    path('explore/<int:pk>/', BookListbyCategoryView.as_view(), name='explore'),
+    path('categories/<slug:category_slug>/', book_list_category, name='book_list_category'),
+    path('book_new_by_ISBN/', book_create_by_ISBN, name= 'new_by_ISBN'),
+    path('new2/', book_create_by_ISBN_2, name = 'book_new2'),
+
+
 ]

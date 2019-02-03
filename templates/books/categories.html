@@ -1,35 +1,40 @@
-{% extends 'base.html' %}
-{% load static  %}
-{% block content %}
-<br>
-{% if sub_categories %}
-    <h3>Sub Categories</h3>
-    {% for i in sub_categories %}
-        <a href="{{ i.slug }}"> {{ i.name }} </a>
-    {% endfor %}
-{% endif %}
+{% extends 'books/base.html' %}
+{% load humanize %}
+{% load book_tags %}
 
-<div class="row small-up-1 medium-up-3" >
-{% if book %}
-{% for i in book_list %}
-    <div class="columns">
-        <div class=" card-article-hover card">
-          <a href="{{ i.slug }}">
-            <img  src="{{ i.picture.url }}">
-          </a>
-          <div class="card-section">
-            <a href="{{ i.slug }}">
-              <h6 class="article-title">{{ i.name | truncatechars:30}}</h6>
-            </a>
-          </div>
-          <div class="card-divider flex-container align-middle">
-            <a href="" class="author">{{ i.seller.username }}</a>
-          </div>
-          <div class="hover-border">
-          </div>
-        </div>
-    </div>
-{% endfor %}
-{% endif %}
+
+{% block title %}All{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="col-sm-3 col-md-6 col-lg-6">
+		{% show_all_categories %}
 </div>
+</div>
+
+    <div >
+        {{ block.super }}
+    </div>
+
+
+    <div class="media-body">
+    		{%  for book in book_list %}
+    		<div class="col-sm-3 col-md-6 col-lg-6">
+    				<div class="small-6 columns">
+    						<div class="callout">
+    							<p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+
+    								<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name|truncatechars:23 }}</a></h5>
+    by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
+
+    								<span class="username">$ {{ book.price }}</span>
+
+    								<p > {{book.date|naturaltime }}</p>
+
+    						</div>
+    				</div>
+    			</div>
+    		{% endfor %}
+    </div>
+
 {% endblock %}

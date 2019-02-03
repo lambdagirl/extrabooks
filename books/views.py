@@ -4,13 +4,19 @@ from django.views.generic.edit import UpdateView,DeleteView,CreateView
 from .models import Book, Category
 from django.urls import reverse_lazy
 from users.models import CustomUser
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.db.models import Q
 #from .forms import ImageUploadForm
-from django.http import Http404
-from django.http import HttpResponseForbidden
+from django.http import Http404,HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from taggit.models import Tag
+import sys
+import isbntools
+from .forms import BookCreatebyISBNForm,BookCreatebyISBNForm2
+from isbnlib import meta
+from isbnlib.registry import bibformatters,PROVIDERS
+from isbnlib._desc import goo_desc
+from isbnlib._cover import cover
 
 class BookListView(ListView):
     model = Book
@@ -26,6 +32,14 @@ def book_list_by_tag(request,tag_slug=None):
     book_list = Book.objects.filter(tags__in=[tag])
     return render(request, 'books/book_list.html', {'book_list':book_list,
                                                 'tag':tag})
+
+def book_list_category(request,category_slug=None):
+    category = None
+    print(category_slug)
+    category= get_object_or_404(Category,slug=category_slug)
+    book_list = Book.objects.filter(category__in=[category])
+    return render(request, 'books/categories.html', {'book_list':book_list,
+                                                'category':category})
 
 class MyBookListView(ListView):
     model = Book
@@ -70,28 +84,33 @@ class BookCreateView(LoginRequiredMixin,CreateView):
         form.instance.seller = self.request.user
         return super().form_valid(form)
 
+def book_create_by_ISBN(request):
+    if request.method == 'POST':
+        form = BookCreatebyISBNForm(data=request.POST)
+        if form.is_valid():
+            isbn = form.cleaned_data['isbn']
+            print(isbn)
+            name = (meta(isbn)['Title'])
+            picture = (cover(isbn)['thumbnail'])
+            description = (goo_desc(isbn))
+        return render(request,'books/book_new2.html',{'isbn':isbn,
+                                                        'name':name,
+                                                        'picture':picture,
+                                                        'description':description})
+    else:
+        form = BookCreatebyISBNForm(data=request.GET)
+    return render(request,'books/book_new_by_ISBN.html',{'form':form})
+
+def book_create_by_ISBN_2(request):
+    if request.method == 'POST':
+        return render(request,'books/book_new2.html')
+
+
 class BookListbyCategoryView(ListView):
     model = Category
-    template_name = 'books/explore.html'
-'''
+    template_name = 'books/categories.html'
 
-    def get_queryset(self, queryset=None):
-        pk = self.kwargs.get(self.lookup_url_kwarg)
-        if pk is not None:
-            queryset = Book.objects.filter(category_pk=pk)
-            print(queryset)
-        return queryset
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        context['category'] = (
-                self.Category.filter(
-                    pk__in=books.category.values_list("category__pk")
-                ))
-        print("context: ", context)
 
-        return context
-'''
 def search(request):
     term = request.GET.get('q')
     books = Book.objects.filter(

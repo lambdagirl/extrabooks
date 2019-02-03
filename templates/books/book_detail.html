@@ -11,7 +11,7 @@
 		</div>
 		<h3> {{ object.name }}</h3>
 		by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
-		<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:explore' book.category.pk %}">{{object.category}}</a></p>
+		<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a></p>
 		<p>{{ object.isbn }} </p>
 		<p>{{ object.description }}</p>
 		<p>{{ object.price }}</p>s
@@ -30,6 +30,10 @@
 		Saved
 	{% endif %}
 	{{object.books_saved.all}}
+</a>
+
+<a href="#" class="btn saves">
+		Make Offer
 </a>
 
 <p> Back to <a href="{% url 'books:book_list' %}">All Books </p>
