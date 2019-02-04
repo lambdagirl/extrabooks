@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
     'saves.apps.SavesConfig',
-
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
@@ -148,3 +148,7 @@ EMAIL_USE_TLS = True
 
 MEDIA_ROOT = os.path.join(STATIC_ROOT, "uploads")
 MEDIA_URL = '/uploads/'
+
+REDIS_HOST='localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0

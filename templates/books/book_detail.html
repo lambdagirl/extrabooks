@@ -10,6 +10,10 @@
 			</div>
 		</div>
 		<h3> {{ object.name }}</h3>
+		<p><span class = "count">
+			{{total_views}}view{{total_views|pluralize}}
+		</span>
+		<p>
 		by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
 		<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a></p>
 		<p>{{ object.isbn }} </p>

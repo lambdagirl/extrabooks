@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from users.models import CustomUser
 from django.shortcuts import render,redirect
 from django.db.models import Q
-#from .forms import ImageUploadForm
 from django.http import Http404,HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from taggit.models import Tag
@@ -17,6 +16,13 @@ from isbnlib import meta
 from isbnlib.registry import bibformatters,PROVIDERS
 from isbnlib._desc import goo_desc
 from isbnlib._cover import cover
+import redis
+from django.conf import settings
+
+#connect to redis
+r = redis.StrictRedis(host=settings.REDIS_HOST,
+                        port = settings.REDIS_PORT,
+                        db = settings.REDIS_DB)
 
 class BookListView(ListView):
     model = Book
@@ -52,6 +58,15 @@ class MyBookListView(ListView):
 class BookDetailView(DetailView):
     model = Book
     template_name = 'books/book_detail.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #increment total book views by 1
+        context["total_views"] = r.incr('context.book:{}:views'.format(context['book'].id))
+        #increment book ranking by 1
+        r.zincrby('book_ranking',context['book'].id,1)
+        return context
 
 class BookDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
     model = Book
@@ -116,3 +131,15 @@ def search(request):
     books = Book.objects.filter(
         Q(name__icontains=term)|Q(description__icontains=term))
     return render(request, 'books/book_list.html', {'book_list':books})
+
+def book_ranking(request):
+    #get image ranking dectionary
+    book_ranking = r.zrange('book_ranking',0,-1, desc = True)[:10]
+    book_ranking_ids = [int(id) for id in book_ranking]
+    #get most viewed images
+    most_viewed = list(Book.objects.filter(id__in=book_ranking_ids))
+    most_viewed.sort(key=lambda x: book_ranking_ids.index(x.id))
+    return render(request,
+                    'books/ranking.html',
+                    {'section':'books',
+                    'most_viewed':most_viewed})

@@ -5,6 +5,8 @@
 {% block title %}All{% endblock %}
 
 {% block content %}
+<p> There are {% total_books %} books so far.</p>
+
     <div class="row columns">
         {{ block.super }}
     </div>
@@ -12,7 +14,6 @@
         {% if tag %}
           <h2> Posts tagged with "{{tag}}"</h2>
         {% endif %}
-        <p> There are {% total_books %} books so far.</p>
         {%  for book in book_list %}
         <div class="col-sm-4 col-md-3 col-lg-2">
             <div class="small-6 columns">

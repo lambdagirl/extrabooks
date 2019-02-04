@@ -1,0 +1,18 @@
+{% extends 'books/base.html' %}
+{% load humanize %}
+
+
+{% block title %}Book Ranking{% endblock %}
+
+{% block content %}
+<h1>Book ranking</h1>
+<ol>
+	{% for book in most_viewed %}
+<li>
+	<a href="{{book.get_absolute_url }}">
+	{{ book.name }}
+</a>
+</li>
+	{% endfor%}
+</ol>
+{% endblock%}
