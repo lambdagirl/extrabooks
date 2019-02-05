@@ -17,6 +17,8 @@ from isbnlib._cover import cover
 from django.conf import settings
 from actions.utils import create_action
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
+
 #connect to redis
 r = redis.StrictRedis(host=settings.REDIS_HOST,
                         port = settings.REDIS_PORT,
@@ -98,7 +100,6 @@ class BookCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
         form.instance.seller = self.request.user
         self.object = form.save(commit=False)
         self.object.save()
-        print(self.object)
         create_action(self.request.user,'selling a book', self.object)
         return super().form_valid(form)
 
@@ -139,6 +140,12 @@ def search(request):
     books = Book.objects.filter(
         Q(name__icontains=term)|Q(description__icontains=term))
     return render(request, 'books/book_list.html', {'book_list':books})
+
+def sort(request):
+    term = request.GET.get('sort')
+    print('term:',term)
+    books = Book.objects.order_by(term)
+    return render(request, 'books/categories.html', {'book_list':books})
 
 def book_ranking(request):
     #get image ranking dectionary

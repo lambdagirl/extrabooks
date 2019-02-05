@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "42461129b0be114972812feb92038f6a0a339303f83071514e36c234b8b4f0ce"
+            "sha256": "8d8d4c6c8229674c666f8045ba789080c7320953e4f16db896854cacb71ae034"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -47,6 +47,21 @@
             ],
             "index": "pypi",
             "version": "==19.9.0"
+        },
+        "isbnlib": {
+            "hashes": [
+                "sha256:4e30c3457442dcf0bf3518c686d0f81a34e6cbd628c6ef349907f37e0d5fcc19",
+                "sha256:7d39bc53df6b3e2f837b859b5aebcb3b1cc89ec041ad49abeeb1ad7efaa8d25f"
+            ],
+            "index": "pypi",
+            "version": "==3.9.4"
+        },
+        "isbntools": {
+            "hashes": [
+                "sha256:984fc5f8d96eaa0b5c689d6c3f9dbe4b928e751fc6da4d57497209c156a38352"
+            ],
+            "index": "pypi",
+            "version": "==4.3.17"
         },
         "pytz": {
             "hashes": [

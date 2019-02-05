@@ -9,7 +9,8 @@
 <div class="media-body">
 	<div class="col-sm-3 col-md-6 col-lg-6">
 		{%  for category in all_categories %}
-		<li><a href="{% url 'books:book_list_category' category.slug %}">{{category.name}}</a></li>
+		<h6><a href="{% url 'books:book_list_category' category.slug %}">{{category.name}}</a></li>
 		{% endfor %}
 </div>
+
 {% endblock%}

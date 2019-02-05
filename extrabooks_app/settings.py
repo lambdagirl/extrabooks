@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'taggit',
     'crispy_forms',
     'isbntools',
+    'isbnlib',
     'sorl.thumbnail',
     'whitenoise.runserver_nostatic',
     'users.apps.UsersConfig',

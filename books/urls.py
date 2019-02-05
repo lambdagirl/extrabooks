@@ -15,7 +15,8 @@ from .views import (
     #BookCreateByISBNView,
     book_create_by_ISBN,
     book_create_by_ISBN_2,
-    book_ranking
+    book_ranking,
+    sort
     )
 
 app_name = "extrabooks_app"
@@ -29,6 +30,7 @@ urlpatterns = [
     path('new/', BookCreateView.as_view(), name = 'book_new'),
     path('my_book_list/', MyBookListView.as_view(), name = 'my_book_list'),
     path('search/', search, name = 'search'),
+    path('sort/', sort, name = 'sort'),
     path('categories/<slug:category_slug>/', book_list_category, name='book_list_category'),
     path('book_new_by_ISBN/', book_create_by_ISBN, name= 'new_by_ISBN'),
     path('new2/', book_create_by_ISBN_2, name = 'book_new2'),

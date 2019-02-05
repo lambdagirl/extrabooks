@@ -11,6 +11,8 @@ django-crispy-forms = "==1.7.2"
 gunicorn = "==19.9.0"
 whitenoise = "==3.3.1"
 django-taggit = "*"
+isbntools = "==4.3.17"
+isbnlib = "==3.9.4"
 
 [requires]
 python_version = "3.7"

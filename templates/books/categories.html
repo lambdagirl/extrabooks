@@ -2,27 +2,43 @@
 {% load humanize %}
 {% load book_tags %}
 
+{% load static from staticfiles %}
 
 {% block title %}All{% endblock %}
 
 {% block content %}
+
 <div class="container">
-	<div class="col-sm-3 col-md-6 col-lg-6">
+	<div class="col-sm-3 col-md-6 col-lg-4">
 		{% show_all_categories %}
 </div>
 </div>
-
     <div >
         {{ block.super }}
     </div>
-
-
     <div class="media-body">
+			<h4>{{category}}</h4>
+			<div>
+
+			<div class="dropdown">
+				<form action="{% url 'books:sort' %}" method="get">
+					<input type="input" class="hidden" name ="sort" >
+					<button>search</button>
+			</form>
+		  <button class="btn btn-primary" data-toggle="dropdown">Filter
+				<span class="caret"></span></button>
+		  <ul class="dropdown-menu">
+		    <li><a data-value="price">Price low to high</a></li>
+		    <li><a data-value="-price">price high to low</a></li>
+		    <li><a data-value="-date">Newest</a></li>
+		  </ul>
+		</div>
+			</div>
     		{%  for book in book_list %}
-    		<div class="col-sm-3 col-md-6 col-lg-6">
+    		<div class="col-sm-3 col-md-6 col-lg-4">
     				<div class="small-6 columns">
     						<div class="callout">
-    							<p><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></p>
+    							<p><a href="{% url 'books:book_detail' book.pk %}"><image src =" {{  book.picture.url }} " width="200px" alt="Rounded Image" class="img-rounded  img-responsive"></a></p>
 
     								<h5 class = "media-heading"><a href="{% url 'books:book_detail' book.pk %}">{{ book.name|truncatechars:23 }}</a></h5>
     by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
@@ -30,11 +46,22 @@
     								<span class="username">$ {{ book.price }}</span>
 
     								<p > {{book.date|naturaltime }}</p>
-
     						</div>
     				</div>
     			</div>
     		{% endfor %}
     </div>
 
+		<!-- jQuery library -->
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 {% endblock %}
+
+
+{% block domready %}
+$(".dropdown-menu li a").click(function(){
+  $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+  $(this).parents(".dropdown").find('input').val($(this).data('value'));
+});
+
+{% endblock%}

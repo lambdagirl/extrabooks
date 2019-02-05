@@ -1,32 +1,28 @@
 {% extends 'books/base.html' %}
 {% load humanize %}
 
-
 {% block content%}
-<div class="article-entry">
 	<div class="carousel-inner">
 		<div class ="item active">
 			<image src =" {{  object.picture.url }} " width="200px" alt="Awesome Image" class="img-rounded  img-responsive">
 			</div>
 		</div>
-		<h3> {{ object.name }}</h3>
-		<p><span class = "count">
-			{{total_views}}view{{total_views|pluralize}}
-		</span>
-		<p>
-		by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
-		<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a></p>
-		<p>{{ object.isbn }} </p>
-		<p>{{ object.description }}</p>
-		<p>{{ object.price }}</p>s
-</div>
+		<div class="col-md-9 col-md-offset-2">
+			<h3> {{ object.name }}</h3>
+			<small><span class = "count">
+				{{total_views}} view{{total_views|pluralize}}
+			</small>
+			<p>
+			by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
+			<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a></p>
+			<p>{{ object.isbn }} </p>
+			<Paragraph>{{ object.description }}</Paragraph>
+			<p>{{ object.price }}</p>
 
 {% if user.is_authenticated and book.seller == user %}
-
 <p> <a href="{% url 'books:book_edit' book.pk %}"> Edit </a> |
 		<a href="{% url 'books:book_delete' book.pk %}">Delete </a></p>
 {% endif %}
-
 <a href="#" class="btn saves" data-id = "{{book.id}}" data-action="{% if book in user.books_saved.all %}un{% endif %}save">
 	{% if book not in object %}
 		Save
@@ -41,4 +37,6 @@
 </a>
 
 <p> Back to <a href="{% url 'books:book_list' %}">All Books </p>
+</div>
+
 {% endblock content%}
