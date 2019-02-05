@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}dashboard{% endblock title %}
+
+{% block content %}
+<h2>What's happening</h2>
+<div>
+	{% for action in actions %}
+		{% include "details.html" %}<hi>
+	{% endfor %}
+</div>
+{% endblock content %}

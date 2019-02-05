@@ -41,11 +41,13 @@ INSTALLED_APPS = [
     'taggit',
     'crispy_forms',
     'isbntools',
+    'sorl.thumbnail',
     'whitenoise.runserver_nostatic',
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
     'saves.apps.SavesConfig',
     'orders.apps.OrdersConfig',
+    'actions.apps.ActionsConfig',
 ]
 
 MIDDLEWARE = [

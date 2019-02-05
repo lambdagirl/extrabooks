@@ -5,20 +5,18 @@ from .models import Book, Category
 from django.urls import reverse_lazy
 from users.models import CustomUser
 from django.shortcuts import render,redirect
-from django.db.models import Q
 from django.http import Http404,HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from taggit.models import Tag
-import sys
-import isbntools
+import sys,redis,isbntools
 from .forms import BookCreatebyISBNForm,BookCreatebyISBNForm2
 from isbnlib import meta
 from isbnlib.registry import bibformatters,PROVIDERS
 from isbnlib._desc import goo_desc
 from isbnlib._cover import cover
-import redis
 from django.conf import settings
-
+from actions.utils import create_action
+from django.contrib.messages.views import SuccessMessageMixin
 #connect to redis
 r = redis.StrictRedis(host=settings.REDIS_HOST,
                         port = settings.REDIS_PORT,
@@ -88,16 +86,26 @@ class BookUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         obj = self.get_object()
         return obj.seller == self.request.user
 
-class BookCreateView(LoginRequiredMixin,CreateView):
+class BookCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
     model = Book
     fields = ['name', 'description', 'price', 'isbn' ,'picture', 'category']
     template_name = 'books/book_new.html'
     success_url = reverse_lazy('books:book_list')
     login_url = 'login'
+    success_message = "%(name)s was created successfully"
 
     def form_valid(self,form):
         form.instance.seller = self.request.user
+        self.object = form.save(commit=False)
+        self.object.save()
+        print(self.object)
+        create_action(self.request.user,'selling a book', self.object)
         return super().form_valid(form)
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(cleaned_data,
+                                           calculated_field=self.object.name)
+
 
 def book_create_by_ISBN(request):
     if request.method == 'POST':
