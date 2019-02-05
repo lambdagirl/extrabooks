@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'isbntools',
     'isbnlib',
-    'sorl.thumbnail',
     'whitenoise.runserver_nostatic',
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
