@@ -32,7 +32,7 @@ urlpatterns = [
     path('search/', search, name = 'search'),
     path('sort/', sort, name = 'sort'),
     path('categories/<slug:category_slug>/', book_list_category, name='book_list_category'),
-    path('book_new_by_ISBN/', book_create_by_ISBN, name= 'new_by_ISBN'),
-    path('new2/', book_create_by_ISBN_2, name = 'book_new2'),
+    path('book_new_by_ISBN/', book_create_by_ISBN, name= 'book_new_by_ISBN'),
+    path('book_by_isbn/', book_create_by_ISBN_2, name='book_by_isbn'),
     path('ranking/', book_ranking, name="ranking")
 ]

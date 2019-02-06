@@ -18,6 +18,11 @@ from django.conf import settings
 from actions.utils import create_action
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
+from django.contrib.sessions.models import Session
+from urllib.parse import urlparse
+import urllib,os
+from django.core.files import File
+
 
 #connect to redis
 r = redis.StrictRedis(host=settings.REDIS_HOST,
@@ -109,26 +114,44 @@ class BookCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
 
 
 def book_create_by_ISBN(request):
+    form = BookCreatebyISBNForm(data=request.GET)
     if request.method == 'POST':
         form = BookCreatebyISBNForm(data=request.POST)
         if form.is_valid():
-            isbn = form.cleaned_data['isbn']
-            print(isbn)
-            name = (meta(isbn)['Title'])
-            picture = (cover(isbn)['thumbnail'])
-            description = (goo_desc(isbn))
-        return render(request,'books/book_new2.html',{'isbn':isbn,
-                                                        'name':name,
-                                                        'picture':picture,
-                                                        'description':description})
-    else:
-        form = BookCreatebyISBNForm(data=request.GET)
+            request.session['isbn'] = form.cleaned_data['isbn']
+            print(request.session['isbn'])
+            return redirect('books:book_by_isbn')
     return render(request,'books/book_new_by_ISBN.html',{'form':form})
 
 def book_create_by_ISBN_2(request):
+    form = BookCreatebyISBNForm2(request.GET)
+    isbn = request.session['isbn']
+    name = (meta(isbn)['Title'])
+    picture_url = (cover(isbn)['thumbnail'])
+    description = (goo_desc(isbn))
+    result = urllib.request.urlretrieve(picture_url)
+    #photo.picture.save(name, File(open(content[0])), save=True)
     if request.method == 'POST':
-        return render(request,'books/book_new2.html')
-
+        form = BookCreatebyISBNForm2(request.POST)
+        if form.is_valid():
+            book=Book(name =name,
+                        isbn= isbn,
+                        picture = picture_url[10:],
+                        description = description,
+                        category = form.cleaned_data['category'],
+                        price = form.cleaned_data['price'],
+                        seller = request.user)
+            book.picture.save(
+                        os.path.basename(picture_url),
+                        File(open(result[0], 'rb'))
+                            )
+            book.save()
+        return redirect(book.get_absolute_url())
+    return render(request,'books/book_by_isbn.html', {'form':form,
+                                                    'isbn':isbn,
+                                                    'name': name,
+                                                    'picture':picture_url,
+                                                    'description':description})
 
 class BookListbyCategoryView(ListView):
     model = Category
