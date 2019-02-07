@@ -26,7 +26,6 @@
 									{% endif %}
 									<div>
 										{% if user.is_authenticated and object != user %}
-
 										{% with total_followers=object.followers.count total_follows=object.from_user.count %}
 
 										<span>

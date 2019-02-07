@@ -46,14 +46,19 @@
 						<li>
 								<form action="{% url 'books:search' %}" method="GET">
 									<input type="search" name="q">
-									<button type = "submit" class="btn btn-fill btn-primary">Search</button>
+									<button type = "submit" class="btn btn-fill btn-primary btn-sm">Search</button>
 								</form>
 							</li>
-						<li><a href="{% url 'books:book_new_by_ISBN' %}" class="btn btn-danger btn-fill" data-toggle="modal" >Sell Books</a></li>
-						<li><a href="{% url 'books:my_book_list' %}" class="btn btn-warning btn-fill">My Books</a></li>
+						<li><a href="{% url 'books:book_new_by_ISBN' %}" class="btn btn-danger btn-fill btn-sm" data-toggle="modal" >Sell Books</a></li>
+						<li><a href="{% url 'books:my_book_list' %}" class="btn-sm btn-warning btn-fill ">My Books</a></li>
+						<li>
+							<a href="{% url 'cart:cart_detail' %}" class="btn btn-simple">cart: <span class="label label-danger">{{cart|length}}</span></a>
+						</li>
+
 						<li><a href="{% url 'logout' %}" class="btn btn-simple">Log out</a></li>
 						{% else %}
 						<li><a href="{% url 'books:book_new' %}" class="btn btn-simple">Sell Books</a></li>
+
 						<li><a href="{% url 'login' %}" class="btn btn-simple">Log in</a></li>
 						<li><a href="{% url 'signup' %}" class="btn btn-simple">Sign up</a></li>
 						{% endif %}

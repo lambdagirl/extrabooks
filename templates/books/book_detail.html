@@ -22,7 +22,10 @@
 {% if user.is_authenticated and book.seller == user %}
 <p> <a href="{% url 'books:book_edit' book.pk %}"> Edit </a> |
 		<a href="{% url 'books:book_delete' book.pk %}">Delete </a></p>
+
 {% endif %}
+{% if book.seller != user %}
+
 <a href="#" class="btn saves" data-id = "{{book.id}}" data-action="{% if book in user.books_saved.all %}un{% endif %}save">
 	{% if book not in object %}
 		Save
@@ -32,9 +35,11 @@
 	{{object.books_saved.all}}
 </a>
 
-<a href="#" class="btn saves">
-		Make Offer
+<form action ="{% url 'cart:cart_add' book.pk %}" method="post">
+	{% csrf_token %}
+<input type="submit"	value ="Add to cart" class="btn">
 </a>
+{% endif %}
 
 <p> Back to <a href="{% url 'books:book_list' %}">All Books </p>
 </div>

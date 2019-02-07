@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart'
             ],
         'libraries':{
             'book_tags':'books.templatetags.book_tags',
@@ -145,11 +146,7 @@ LOGOUT_REDIRECT_URL = 'books:book_list'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-<<<<<<< HEAD
 EMAIL_HOST_PASSWORD = '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'
-=======
-EMAIL_HOST_PASSWORD = '#'
->>>>>>> bc244d9d7b3a56a23e42c4bf50a720edf56cf405
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -159,3 +156,4 @@ MEDIA_URL = '/uploads/'
 REDIS_HOST='localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
+CART_SESSION_ID = 'cart'

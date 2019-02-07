@@ -1,0 +1,61 @@
+{% extends "base.html"%}
+{% load static%}
+{% load humanize %}
+
+{% block title %}
+	Your shopping cart
+{% endblock %}
+
+{% block content %}
+<h3> Your shopping cart</h3>
+<div class="container">
+
+{% regroup book_list by seller as seller_list %}
+{% for seller in seller_list %}
+	<div class="default">
+<h6>sales by: <a href="{% url 'profile' seller.grouper.slug %}"> {{ seller.grouper }}</a></h6>
+
+<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>Images</th>
+								<th>Book</th>
+								<th>Price</th>
+								<th></th>
+
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for book_list in seller.list %}
+										<tr>
+											<td>
+												<a href="{{book_list.book.get_absolute_url}}">
+													<image src ="{{  book_list.book.picture.url }} "
+												width="100px" alt="Awesome Image" class="img-rounded  img-responsive">
+											</a>
+										</td>
+										<td>{{ book_list.book|truncatechars:50}}</td>
+										<td class ="num">${{ book_list.price }}<td>
+
+										<td><a href="{% url 'cart:cart_remove' book_list.book.pk %}">Remove</a><td>
+										</tr>
+										{% endfor%}
+							<tr class ="total">
+								<td> Subtotal </td>
+								<td> {{seller.list|length}}</td>
+								<td> {{cart.get_total_price}}</td>
+								<td class="text-right">
+									<a href="#" class="btn btn-sm"> Make offer </a>
+									<a href="#" class="btn btn-sm"> Checkout </a>
+								</td>
+							</tr>
+						</div>
+						</tbody>
+					</table>
+				</div>
+
+					{% endfor %}
+				</div>
+
+{% endblock %}
