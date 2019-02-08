@@ -27,6 +27,8 @@ urlpatterns = [
     path('s/', include('saves.urls')),
     path('',include('books.urls', namespace="books")),
     path('cart/',include('cart.urls', namespace = 'cart')),
+    path('orders/', include('orders.urls', namespace='orders')),
+
 ]
 
 if settings.DEBUG:

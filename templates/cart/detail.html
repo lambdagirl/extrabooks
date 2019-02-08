@@ -14,7 +14,6 @@
 {% for seller in seller_list %}
 	<div class="default">
 <h6>sales by: <a href="{% url 'profile' seller.grouper.slug %}"> {{ seller.grouper }}</a></h6>
-
 <table class="table table-condensed">
 						<thead>
 							<tr>
@@ -22,10 +21,8 @@
 								<th>Book</th>
 								<th>Price</th>
 								<th></th>
-
 							</tr>
 						</thead>
-
 						<tbody>
 							{% for book_list in seller.list %}
 										<tr>
@@ -46,7 +43,7 @@
 								<td> {{seller.list|length}}</td>
 								<td> {{cart.get_total_price}}</td>
 								<td class="text-right">
-									<a href="#" class="btn btn-sm"> Make offer </a>
+									<a href="{% url 'orders:make_offer' seller.grouper %}" class="btn btn-sm"> Make offer </a>
 									<a href="#" class="btn btn-sm"> Checkout </a>
 								</td>
 							</tr>
@@ -54,7 +51,6 @@
 						</tbody>
 					</table>
 				</div>
-
 					{% endfor %}
 				</div>
 

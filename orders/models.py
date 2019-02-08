@@ -18,22 +18,21 @@ class Order(models.Model):
 
     def __str__(self):
         return 'Order {}'.format(self.id)
-'''
+
 class Offer(models.Model):
     user = models.ForeignKey(
                 get_user_model(),
                 on_delete = models.CASCADE,)
-    price = models.DecimalField(max_digits=10,decimal_places=2)
+    offer_price = models.DecimalField(max_digits=10,decimal_places=2)
+
+    def __str__(self):
+        return 'Order {}'.format(self.id)
+
+class OfferItem(models.Model):
+    offer = models.ForeignKey(Offer, related_name='item', on_delete = models.CASCADE,)
     book = models.ForeignKey(
                 Book,
-                related_name='offer_book'
-                on_delete = models.CASCADE,)
-                '''
-class OfferBook(models.Model):
-    offer = models.ForeignKey(Order,on_delete = models.CASCADE,)
-    book = models.ForeignKey(
-                Book,
-                related_name='offer_book',
+                related_name='offer_items',
                 on_delete = models.CASCADE,)
     price = models.DecimalField(max_digits=10,decimal_places=2)
 

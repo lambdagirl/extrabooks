@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from books.models import Book
 from .cart import Cart
-from .forms import OfferPriceForm
 from django.views.decorators.http import require_POST
 # Create your views here.
 from operator import itemgetter
+from collections import defaultdict
 
 @require_POST
 def cart_add(request,book_pk):
@@ -27,7 +27,3 @@ def cart_detail(request):
     seller = [d['seller'].username for d in book_list]
     book_list = sorted(book_list, key=lambda k: k['seller'].username)
     return render(request, 'cart/detail.html', {'cart':cart, 'book_list':book_list, 'seller':seller})
-'''
-def make_offer(request):
-    return render(request, 'cart/offer.html', {})
-    '''

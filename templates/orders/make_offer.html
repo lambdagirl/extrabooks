@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Make offer{% endblock title %}
+
+{% block content %}
+<h2> Make offer</h2>
+<div class="container">
+
+<h6> sell by :  {{seller}} </h6>
+	{% for book in books %}
+		<p>{{book.name}} ${{book.price}}</p>
+	{% endfor %}
+
+	<div class="form-group">
+			<form action="" method="POST">
+					{{ form.as_p }}
+					{% csrf_token %}</div>
+					<input type="submit" class="btn" >
+			</form>
+	</div>
+</div>
+{% endblock content %}
