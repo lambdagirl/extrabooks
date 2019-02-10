@@ -47,7 +47,7 @@ def make_offer(request, seller):
 
 def create_order(request):
     offer_id =request.session['offer_id']
-    form = OrderCreateForm(request.GET)
+    form = OrderCreateForm()
     offer = get_object_or_404(Offer, pk=offer_id)
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)

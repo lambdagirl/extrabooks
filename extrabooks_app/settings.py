@@ -25,7 +25,7 @@ SECRET_KEY = 'saxx*8^cib1va1%w70yj5j3oge=pgj%q=ug=qwtp+%-s7_wpn+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['extrabooks.com', 'localhost','127.0.0.1']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'isbntools',
     'isbnlib',
+    'social_django',
     'whitenoise.runserver_nostatic',
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
@@ -93,10 +94,12 @@ WSGI_APPLICATION = 'extrabooks_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',
     }
 }
+
+
 
 
 # Password validation
@@ -173,3 +176,8 @@ Configuration.configure(
 )
 
 CELERY_BROKER_URL = 'amqp://localhost'
+
+AUTHENTICATION_BACKENDS = 'social_core.backends.facebook.FacebookOAuth2',
+SOCIAL_AUTH_FACEBOOK_KEY ="1225154254309864"
+SOCIAL_AUTH_FACEBOOK_SECRET ="3a8fa15aaff2cfdec4899143da1d52ae"
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']

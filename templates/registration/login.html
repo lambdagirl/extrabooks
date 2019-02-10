@@ -5,6 +5,12 @@
 {% block content %}
 <h2> Log In</h2>
 
+<div class="social">
+	<ul>
+		<li class="facebook"><a href="{% url "social:begin" "facebook"%}"> Sign in with Facebook
+		</a></li>
+	</ul>
+</div>
 <form method="POST">
 	{% csrf_token %}
 	{{ form.as_p }}
