@@ -15,6 +15,11 @@ isbntools = "==4.3.17"
 isbnlib = "==3.9.4"
 redis = "*"
 redis-server = "*"
+celery = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

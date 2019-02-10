@@ -1,11 +1,13 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
+from .tasks import order_created
 from .forms import OrderCreateForm, OfferPriceForm
 from cart.cart import Cart
 from books.models import Book
-from .models import Offer,OfferItem
+from .models import Offer,OfferItem, Order
 from decimal import Decimal
-
+from django.urls import reverse
 # Create your views here.
+from django.contrib.sessions.models import Session
 
 def order_create(request,):
     cart = Cart(request)
@@ -23,12 +25,10 @@ def make_offer(request, seller):
     total_price = 0
     for book in books:
         total_price += book.price
-        print(book.name)
     if request.method == 'POST':
         form = OfferPriceForm(request.POST)
         if form.is_valid():
             offer_price = form.cleaned_data['offer_price']
-            print(offer_price)
             offer = form.save(commit = False)
             offer.user = request.user
             offer.offer_price = offer_price
@@ -37,13 +37,37 @@ def make_offer(request, seller):
                 OfferItem.objects.create(offer = offer,
                                         book = book,
                                         price =book.price)
-            #form = OrderCreateForm()
-            #return render(request,'orders/offer_created.html',{'offer':offer, 'form':form})
+            request.session['offer_id'] =offer.id
+            for book in books:
+                cart.remove(book)
             return redirect('orders:create_order')
         else:
             form =  OfferPriceForm()
     return render(request, 'orders/make_offer.html', {'books':books, 'seller':seller, 'form':form})
 
 def create_order(request):
+    offer_id =request.session['offer_id']
     form = OrderCreateForm(request.GET)
-    return render(request,'orders/offer_created.html',{'form':form})
+    offer = get_object_or_404(Offer, pk=offer_id)
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            address = form.cleaned_data['address']
+            postal_code = form.cleaned_data['postal_code']
+            city = form.cleaned_data['city']
+            Order.objects.create(offer= offer,
+                                first_name = first_name,
+                                last_name =last_name,
+                                email =email,
+                                address = address,
+                                postal_code = postal_code,
+                                city = city,
+                                )
+            order_created.delay(offer_id)
+            return redirect(reverse('payment:process'))
+        else:
+            form = OrderCreateForm()
+    return render(request,'orders/create_order.html',{'form':form})

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'actions.apps.ActionsConfig',
     'cart.apps.CartConfig',
+    'payment.apps.PaymentConfig'
 ]
 
 MIDDLEWARE = [
@@ -157,3 +158,18 @@ REDIS_HOST='localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
 CART_SESSION_ID = 'cart'
+
+#Braintree settings
+BRAINTREE_MERCHANT_ID = 'rhxfsjtb5jm7f6zg'
+BRAINTREE_PUBLIC_KEY = 'fdkvjytvf9nc6fwc'
+BRAINTREE_PRIVATE_KEY = '77280ee7fd95df0afa8843c92ab85eb5'
+
+from braintree import Configuration, Environment
+Configuration.configure(
+    Environment.Sandbox,
+    BRAINTREE_MERCHANT_ID,
+    BRAINTREE_PUBLIC_KEY,
+    BRAINTREE_PRIVATE_KEY
+)
+
+CELERY_BROKER_URL = 'amqp://localhost'
