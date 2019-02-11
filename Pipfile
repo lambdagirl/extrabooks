@@ -20,6 +20,8 @@ pillow = "*"
 social-auth-app-django = "*"
 braintree = "*"
 django-redis = "*"
+django-redis-cache = "*"
+heroku = "*"
 
 [requires]
 python_version = "3.7"
