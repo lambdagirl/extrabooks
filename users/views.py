@@ -1,5 +1,5 @@
 from actions.models import Action
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -11,6 +11,11 @@ from books.models import Book,Category
 from .forms import CustomUserCreationForm
 from .models import CustomUser,Contact
 from actions.utils import create_action
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from social_django.models import UserSocialAuth
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -73,19 +78,7 @@ def user_follow(request):
         except CustomUser.DoesNotExist:
             return JsonResponse({'status':'ko'})
         return JsonResponse({'status':'ko'})
-'''
-class FollowersView(ListView):
-    model = CustomUser
-    template_name = 'profile/followers.html'
 
-    def get_profile_followers(user):
-        return user.followers.all().select_related('follower')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["follower_list"] = get_profile_followers(self.object) # self.object is user profile
-        return context
-'''
 def dashboard(request):
     actions = Action.objects.exclude(user=request.user)
     following_ids = request.user.following.values_list('id',flat=True)
@@ -94,3 +87,37 @@ def dashboard(request):
         actions = actions.filter(user_id__in=following_ids)
     actions = actions.select_related('user').prefetch_related('target')[:10]
     return render(request,'dashboard.html',{'section':'dashboard','actions':actions})
+
+@login_required
+def sosettings(request):
+    user = request.user
+    try:
+        facebook_login = user.social_auth.get(provider='facebook')
+    except UserSocialAuth.DoesNotExist:
+        facebook_login = None
+
+    can_disconnect = (user.social_auth.count() > 1 or user.has_usable_password())
+    return render(request, 'social/settings.html', {
+        'facebook_login': facebook_login,
+        'can_disconnect': can_disconnect
+    })
+
+@login_required
+def password(request):
+    if request.user.has_usable_password():
+        PasswordForm = PasswordChangeForm
+    else:
+        PasswordForm = AdminPasswordChangeForm
+
+    if request.method == 'POST':
+        form = PasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Your password was successfully updated!')
+            #return redirect('password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordForm(request.user)
+    return render(request, 'social/password.html', {'form': form})

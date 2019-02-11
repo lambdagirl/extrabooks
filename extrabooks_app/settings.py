@@ -62,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # <--
 ]
 
 ROOT_URLCONF = 'extrabooks_app.urls'
@@ -77,7 +78,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart'
+                'cart.context_processors.cart',
+                'social_django.context_processors.backends',  # <--
+                'social_django.context_processors.login_redirect', # <--
             ],
         'libraries':{
             'book_tags':'books.templatetags.book_tags',
@@ -157,10 +160,6 @@ EMAIL_USE_TLS = True
 MEDIA_ROOT = os.path.join(STATIC_ROOT, "uploads")
 MEDIA_URL = '/uploads/'
 
-REDIS_HOST=['redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519']
-REDIS_PORT = 6379
-REDIS_DB = 0
-
 CART_SESSION_ID = 'cart'
 
 #Braintree settings
@@ -178,16 +177,10 @@ Configuration.configure(
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
-#AUTHENTICATION_BACKENDS = 'social_core.backends.facebook.FacebookOAuth2',
-#SOCIAL_AUTH_FACEBOOK_KEY ="1225154254309864"
-#SOCIAL_AUTH_FACEBOOK_SECRET ="3a8fa15aaff2cfdec4899143da1d52ae"
-#SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-'''
-CACHES = {
-    "default": {
-         "BACKEND": "redis_cache.RedisCache",
-         "LOCATION": os.environ.get('redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519'),
-    }
-}
-'''
-#REDIS_URL = 'redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519'
+AUTHENTICATION_BACKENDS = ('social_core.backends.facebook.FacebookOAuth2',
+                            'django.contrib.auth.backends.ModelBackend')
+SOCIAL_AUTH_FACEBOOK_KEY ="1225154254309864"
+SOCIAL_AUTH_FACEBOOK_SECRET ="3a8fa15aaff2cfdec4899143da1d52ae"
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False

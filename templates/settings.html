@@ -4,6 +4,10 @@
 	<h1> Edit </h1>
 	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 		{{ form.as_p }}
-		<button class = "btn" type = "submit" >Update</button>
+		<p><button class="btn  btn-success" type="button"><a href="{% url 'password' %}"> Change Password</a></button></p>
+		<p><button class="btn  btn-info"><a href="{% url 'sosettings' %}"> Facebook</a></button></p>
+
+		<button class = "btn" type = "submit" >Save</button>
 	</form>
+
 {% endblock content%}
