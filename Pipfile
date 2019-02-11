@@ -14,9 +14,12 @@ django-taggit = "*"
 isbntools = "==4.3.17"
 isbnlib = "==3.9.4"
 redis = "*"
-redis-server = "*"
 celery = "*"
 requests = "*"
+pillow = "*"
+social-auth-app-django = "*"
+braintree = "*"
+django-redis = "*"
 
 [requires]
 python_version = "3.7"
