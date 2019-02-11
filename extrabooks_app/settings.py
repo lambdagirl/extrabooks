@@ -157,9 +157,10 @@ EMAIL_USE_TLS = True
 MEDIA_ROOT = os.path.join(STATIC_ROOT, "uploads")
 MEDIA_URL = '/uploads/'
 
-REDIS_HOST='redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519'
+REDIS_HOST=['redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519']
 REDIS_PORT = 6379
 REDIS_DB = 0
+
 CART_SESSION_ID = 'cart'
 
 #Braintree settings
@@ -181,11 +182,12 @@ CELERY_BROKER_URL = 'amqp://localhost'
 #SOCIAL_AUTH_FACEBOOK_KEY ="1225154254309864"
 #SOCIAL_AUTH_FACEBOOK_SECRET ="3a8fa15aaff2cfdec4899143da1d52ae"
 #SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-
-
+'''
 CACHES = {
     "default": {
          "BACKEND": "redis_cache.RedisCache",
-         "LOCATION": os.environ.get('REDIS_URL'),
+         "LOCATION": os.environ.get('redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519'),
     }
 }
+'''
+#REDIS_URL = 'redis://h:p053bb620d6c2db69a97836b114d9ea07e03e4ac926c33c851c8de6264c2a5dad@ec2-3-91-118-206.compute-1.amazonaws.com:30519'
