@@ -32,6 +32,9 @@
 
 										<span class="username">$ {{ book.price }}</span>
                     <p > {{book.date|naturaltime }}</p>
+                    <span > {{book.city }}</span>
+                    <span > {{book.distance }}</span>
+
                     {% for tag in book.tags.all %}
                     <p class ="label label-danger">
                       <a href="{% url 'books:book_list_by_tag' tag.slug %}">

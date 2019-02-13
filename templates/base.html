@@ -49,6 +49,11 @@
 									<button type = "submit" class="btn btn-fill btn-primary btn-sm">Search</button>
 								</form>
 							</li>
+							<li>
+									<form action="{% url 'books:get_distance' %}" method="GET">
+										<input type="search" class="sm" name="city">
+									</form>
+								</li>
 						<li><a href="{% url 'books:book_new_by_ISBN' %}" class="btn btn-danger btn-fill btn-sm" data-toggle="modal" >Sell Books</a></li>
 						<li><a href="{% url 'books:my_book_list' %}" class="btn-sm btn-warning btn-fill ">My Books</a></li>
 						<li>

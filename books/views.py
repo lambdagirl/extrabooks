@@ -22,14 +22,12 @@ from django.contrib.sessions.models import Session
 from urllib.parse import urlparse
 import urllib,os
 from django.core.files import File
-
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.measure import D
+from django.contrib.gis.geos import Point
+from geopy.geocoders import Nominatim
 
 #connect to redis
-'''
-r = redis.StrictRedis(host=settings.REDIS_HOST,
-                        port = settings.REDIS_PORT,
-                        db = settings.REDIS_DB)
-r = redis.from_url(os.environ.get(settings.REDIS_URL))'''
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 r = redis.from_url(redis_url)
 redistogo_url = os.getenv('REDISTOGO_URL', None)
@@ -45,6 +43,14 @@ session_opts = { 'session.type': 'redis', 'session.url':
                 redis_url, 'session.data_dir': './cache/',
                 'session.key': 'appname', 'session.auto': True, }
 
+geolocator = Nominatim(user_agent="extrabooks_app")
+
+def get_user_location(city):
+    location = geolocator.geocode(city)
+    longitude = location.longitude
+    latitude = location.latitude
+    user_location = Point(longitude,latitude,srid=4326)
+    return user_location
 
 class BookListView(ListView):
     model = Book
@@ -183,7 +189,6 @@ def search(request):
 
 def sort(request):
     term = request.GET.get('sort')
-    print('term:',term)
     books = Book.objects.order_by(term)
     return render(request, 'books/categories.html', {'book_list':books})
 
@@ -198,3 +203,8 @@ def book_ranking(request):
                     'books/ranking.html',
                     {'section':'books',
                     'most_viewed':most_viewed})
+def get_distance(request):
+    city = request.GET.get('city')
+    user_location =get_user_location(city)
+    books = Book.objects.annotate(distance=Distance('location', user_location)).order_by('distance')
+    return render(request, 'books/book_list.html', {'book_list':books})

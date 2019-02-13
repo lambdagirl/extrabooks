@@ -17,8 +17,7 @@
 												</div>
 												<div class="name">
 													<h4> {{ object.username }}<br /><small>{{ object.first_name }}</h4>
-														<p>zipcode: {{ object.zip_code }} </p>
-														<p>city:{{object.get_usercity}}</p>
+														<p>City: {{ object.city }} </p>
 														<p>Date joined:{{ object.date_joined|naturalday }} </p>
 										</div>
 										{% if user.is_authenticated and object == user %}
@@ -105,7 +104,7 @@
 																								</div>
 																							<div class="col-md-7 col-xs-4">
 																									<h6>{{follower}}<br>
-																										<small>{{follower.zip_code}}<small>
+																										<small>{{follower.city}}<small>
 																										</h6>
 																								</div>
 																								<div class="col-md-3 col-xs-2">

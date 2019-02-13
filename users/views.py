@@ -31,7 +31,7 @@ class SignUpView(CreateView):
 
 class EditProfileView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = CustomUser
-    fields = ['username', 'zip_code', 'first_name','last_name', 'avatar', ]
+    fields = ['username', 'city', 'first_name','last_name', 'avatar', ]
     template_name = 'settings.html'
     login_url = 'login'
 
@@ -88,7 +88,7 @@ def dashboard(request):
     actions = actions.select_related('user').prefetch_related('target')[:10]
     return render(request,'dashboard.html',{'section':'dashboard','actions':actions})
 
-@login_required
+@login_required(login_url='/users/login/')
 def sosettings(request):
     user = request.user
     try:
@@ -102,7 +102,7 @@ def sosettings(request):
         'can_disconnect': can_disconnect
     })
 
-@login_required
+@login_required(login_url='/users/login/')
 def password(request):
     if request.user.has_usable_password():
         PasswordForm = PasswordChangeForm

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'isbntools',
     'isbnlib',
     'social_django',
+    'django.contrib.gis',
+    'django_celery_results',
     'whitenoise.runserver_nostatic',
     'users.apps.UsersConfig',
     'books.apps.BooksConfig',
@@ -94,7 +96,7 @@ WSGI_APPLICATION = 'extrabooks_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -102,7 +104,17 @@ DATABASES = {
     }
 }
 
-
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'extrabooks',
+        'USER': 'parisa',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 
 # Password validation
@@ -176,6 +188,7 @@ Configuration.configure(
 )
 
 CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'django-db'
 
 AUTHENTICATION_BACKENDS = ('social_core.backends.facebook.FacebookOAuth2',
                             'django.contrib.auth.backends.ModelBackend')

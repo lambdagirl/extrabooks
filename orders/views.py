@@ -6,8 +6,8 @@ from books.models import Book
 from .models import Offer,OfferItem, Order
 from decimal import Decimal
 from django.urls import reverse
-# Create your views here.
 from django.contrib.sessions.models import Session
+from django.contrib.auth.decorators import login_required
 
 def order_create(request,):
     cart = Cart(request)
@@ -16,6 +16,7 @@ def order_create(request,):
         if form.is_valid():
             order = forms.save()
 
+@login_required(login_url='/users/login/')
 def make_offer(request, seller):
     form = OfferPriceForm(request.GET)
     seller = seller
