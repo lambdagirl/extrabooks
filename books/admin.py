@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields={'slug':('name',)}
 
 class BookAdmin(OSMGeoAdmin):
-    list_display=['name','category','price','date','seller','city','location']
+    list_display=['name','category','price','date','seller','city','location', 'condition']
     list_filter =['category','date']
     list_editable = ['price','city']
 admin.site.register(Category,CategoryAdmin)

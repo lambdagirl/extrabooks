@@ -14,10 +14,12 @@
 			</small>
 			<p>
 			by <a href="{% url 'profile' book.seller.slug %}">{{book.seller}}</a>
-			<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a></p>
+			<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a> {{ object.get_condition_display }}</p>
+
 			<p>{{ object.isbn }} </p>
 			<Paragraph>{{ object.description }}</Paragraph>
 			<p>{{ object.price }}</p>
+
 
 {% if user.is_authenticated and book.seller == user %}
 <p> <a href="{% url 'books:book_edit' book.pk %}"> Edit </a> |

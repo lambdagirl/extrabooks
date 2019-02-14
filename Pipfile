@@ -29,6 +29,8 @@ psycopg2-binary = "*"
 gdal = "*"
 postgis = "*"
 geopy = "*"
+pip = "*"
+pywatchman = "*"
 
 [requires]
 python_version = "3.7"

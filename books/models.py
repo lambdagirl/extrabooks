@@ -5,19 +5,9 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from taggit.managers import TaggableManager
 from django.utils.text import slugify
-import uuid
-from django.contrib.gis.geos import Point
-from geopy.geocoders import Nominatim
 from geopy import distance
 from django.contrib.gis.db.models import PointField
-geolocator = Nominatim(user_agent="extrabooks_app")
-
-def get_book_location(city):
-    location = geolocator.geocode(city)
-    longitude = location.longitude
-    latitude = location.latitude
-    book_location = Point(longitude,latitude)
-    return book_location
+from .location import get_city_location
 
 # Create your models here.
 class Category(models.Model): # The Category table name that inherits models.Model
@@ -59,11 +49,20 @@ class Book(models.Model):
             on_delete = models.CASCADE,)
     category = models.ForeignKey('Category', related_name='books',
                                 on_delete = models.CASCADE,)
+    CONDITION_CHOICES = (
+    ('1', 'New(never used)'),
+    ('2', 'Used(like new)'),
+    ('3', 'Used(good)'),
+    ('3', 'Used(acceptable)'),
+    ('4', 'Others'),
+)
+    condition = models.CharField(max_length=1, choices=CONDITION_CHOICES)
+
     class Meta:
         ordering = ('-date',)
 
     def save(self, *args, **kwargs):
-        self.location = get_book_location(self.city)
+        self.location = get_city_location(self.city)
         super(Book, self).save(*args, **kwargs)
 
     def get_absolute_url(self):

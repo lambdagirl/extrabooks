@@ -22,10 +22,8 @@ from django.contrib.sessions.models import Session
 from urllib.parse import urlparse
 import urllib,os
 from django.core.files import File
+from .location import get_city_location
 from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.measure import D
-from django.contrib.gis.geos import Point
-from geopy.geocoders import Nominatim
 
 #connect to redis
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
@@ -42,15 +40,6 @@ else:
 session_opts = { 'session.type': 'redis', 'session.url':
                 redis_url, 'session.data_dir': './cache/',
                 'session.key': 'appname', 'session.auto': True, }
-
-geolocator = Nominatim(user_agent="extrabooks_app")
-
-def get_user_location(city):
-    location = geolocator.geocode(city)
-    longitude = location.longitude
-    latitude = location.latitude
-    user_location = Point(longitude,latitude,srid=4326)
-    return user_location
 
 class BookListView(ListView):
     model = Book
@@ -86,8 +75,6 @@ class MyBookListView(ListView):
 class BookDetailView(DetailView):
     model = Book
     template_name = 'books/book_detail.html'
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         #increment total book views by 1
@@ -134,8 +121,6 @@ class BookCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(cleaned_data,
                                            calculated_field=self.object.name)
-
-
 def book_create_by_ISBN(request):
     form = BookCreatebyISBNForm(data=request.GET)
     if request.method == 'POST':
@@ -163,6 +148,8 @@ def book_create_by_ISBN_2(request):
                         description = description,
                         category = form.cleaned_data['category'],
                         price = form.cleaned_data['price'],
+                        city = form.cleaned_data['city'],
+                        condition = form.cleaned_data['condition'],
                         seller = request.user)
             book.picture.save(
                         os.path.basename(picture_url),
@@ -179,7 +166,6 @@ def book_create_by_ISBN_2(request):
 class BookListbyCategoryView(ListView):
     model = Category
     template_name = 'books/categories.html'
-
 
 def search(request):
     term = request.GET.get('q')
@@ -203,8 +189,9 @@ def book_ranking(request):
                     'books/ranking.html',
                     {'section':'books',
                     'most_viewed':most_viewed})
+
 def get_distance(request):
     city = request.GET.get('city')
-    user_location =get_user_location(city)
+    user_location =get_city_location(city)
     books = Book.objects.annotate(distance=Distance('location', user_location)).order_by('distance')
     return render(request, 'books/book_list.html', {'book_list':books})

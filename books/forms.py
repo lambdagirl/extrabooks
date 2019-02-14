@@ -7,4 +7,4 @@ class BookCreatebyISBNForm(forms.Form):
 class BookCreatebyISBNForm2(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ('price','category',)
+        fields = ('price','category','city', 'condition')
