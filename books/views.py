@@ -41,7 +41,18 @@ session_opts = { 'session.type': 'redis', 'session.url':
                 redis_url, 'session.data_dir': './cache/',
                 'session.key': 'appname', 'session.auto': True, }
 
-class BookListView(ListView):
+
+class BookSearchMixin:
+    def get_queryset(self):
+        q = self.request.GET.get('q')
+        books=Book.objects.all()
+        if q: #return a filtered quertset
+            books= Book.objects.filter(
+            Q(name__icontains=q)|Q(description__icontains=q)|Q(isbn__icontains=q))
+        #no q is specified so we return queryset
+        return books
+
+class BookListView(BookSearchMixin,ListView):
     model = Book
     tag = None
     queryset = model.objects.order_by('-date')
@@ -83,22 +94,22 @@ class BookDetailView(DetailView):
         r.zincrby('book_ranking',context['book'].id,1)
         return context
 
-class BookDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
+class BookDeleteView(LoginRequiredMixin,UserPassesTestMixin, SuccessMessageMixin,DeleteView):
     model = Book
     template_name = 'books/book_delete.html'
     success_url = reverse_lazy('books:book_list')
     login_url = 'login'
-
+    success_message = "%(name)s was delete successfully"
     def test_func(self):
         obj = self.get_object()
         return obj.seller == self.request.user
 
-class BookUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+class BookUpdateView(LoginRequiredMixin,UserPassesTestMixin,SuccessMessageMixin,UpdateView):
     model = Book
     fields = ['name', 'description', 'price', 'picture', 'category']
     template_name = 'books/book_edit.html'
     login_url = 'login'
-
+    success_message = " %(name)s Updated successfully!"
     def test_func(self):
         obj = self.get_object()
         return obj.seller == self.request.user
@@ -109,7 +120,7 @@ class BookCreateView(LoginRequiredMixin,SuccessMessageMixin,CreateView):
     template_name = 'books/book_new.html'
     success_url = reverse_lazy('books:book_list')
     login_url = 'login'
-    success_message = "%(name)s was created successfully"
+    success_message = "%(calculated_field)s was created successfully"
 
     def form_valid(self,form):
         form.instance.seller = self.request.user
@@ -126,8 +137,9 @@ def book_create_by_ISBN(request):
     if request.method == 'POST':
         form = BookCreatebyISBNForm(data=request.POST)
         if form.is_valid():
-            request.session['isbn'] = form.cleaned_data['isbn']
-            print(request.session['isbn'])
+            isbn = form.cleaned_data['isbn']
+            isbn= isbn.replace('-', '').replace(' ', '')
+            request.session['isbn'] = isbn
             return redirect('books:book_by_isbn')
     return render(request,'books/book_new_by_ISBN.html',{'form':form})
 
@@ -138,7 +150,6 @@ def book_create_by_ISBN_2(request):
     picture_url = (cover(isbn)['thumbnail'])
     description = (goo_desc(isbn))
     result = urllib.request.urlretrieve(picture_url)
-    #photo.picture.save(name, File(open(content[0])), save=True)
     if request.method == 'POST':
         form = BookCreatebyISBNForm2(request.POST)
         if form.is_valid():
@@ -153,8 +164,7 @@ def book_create_by_ISBN_2(request):
                         seller = request.user)
             book.picture.save(
                         os.path.basename(picture_url),
-                        File(open(result[0], 'rb'))
-                            )
+                        File(open(result[0], 'rb')))
             book.save()
         return redirect(book.get_absolute_url())
     return render(request,'books/book_by_isbn.html', {'form':form,
@@ -166,12 +176,6 @@ def book_create_by_ISBN_2(request):
 class BookListbyCategoryView(ListView):
     model = Category
     template_name = 'books/categories.html'
-
-def search(request):
-    term = request.GET.get('q')
-    books = Book.objects.filter(
-        Q(name__icontains=term)|Q(description__icontains=term))
-    return render(request, 'books/book_list.html', {'book_list':books})
 
 def sort(request):
     term = request.GET.get('sort')

@@ -9,7 +9,6 @@ from django.contrib.gis.db.models import PointField
 
 geolocator = Nominatim(user_agent="extrabooks_app")
 
-#from books.models import Books
 def get_user_location(city):
     location = geolocator.geocode(city)
     longitude = location.longitude

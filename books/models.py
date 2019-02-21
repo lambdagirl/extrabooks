@@ -9,7 +9,6 @@ from geopy import distance
 from django.contrib.gis.db.models import PointField
 from .location import get_city_location
 
-# Create your models here.
 class Category(models.Model): # The Category table name that inherits models.Model
     name = models.CharField(max_length=100) #Like a varchar
     slug = models.SlugField(unique=True)
@@ -36,7 +35,7 @@ class Book(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add = True)
     description = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
-    isbn = models.CharField('ISBN', max_length=13, help_text='13 Character')
+    isbn = models.CharField('ISBN', max_length=14, help_text='13 Character')
     price = models.DecimalField(max_digits=10,decimal_places=2)
     tags= TaggableManager()
     city = models.CharField(max_length=50)

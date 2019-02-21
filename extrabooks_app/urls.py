@@ -30,6 +30,7 @@ urlpatterns = [
     path('orders/', include('orders.urls', namespace='orders')),
     path('payment/', include('payment.urls', namespace='payment')),
     path('social-auth/', include('social_django.urls', namespace='social')),
+    path('chat/', include('chat.urls')),
 ]
 
 if settings.DEBUG:

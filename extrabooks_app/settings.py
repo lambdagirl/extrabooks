@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'isbntools',
     'isbnlib',
     'social_django',
+    'channels',
     'django.contrib.gis',
     'django_celery_results',
     'whitenoise.runserver_nostatic',
@@ -52,7 +53,9 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'actions.apps.ActionsConfig',
     'cart.apps.CartConfig',
-    'payment.apps.PaymentConfig'
+    'payment.apps.PaymentConfig',
+    'chat.apps.ChatConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -197,3 +200,14 @@ SOCIAL_AUTH_FACEBOOK_SECRET ="3a8fa15aaff2cfdec4899143da1d52ae"
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+# Channels
+ASGI_APPLICATION = 'extrabooks_app.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
