@@ -12,55 +12,55 @@
   }
 
   Radio.prototype = {
-  
+
     constructor: Radio
     
-  , init: function (element, options) {      
+  , init: function (element, options) {
       var $el = this.$element = $(element)
-      
-      this.options = $.extend({}, $.fn.radio.defaults, options);      
-      $el.before(this.options.template);    
+
+      this.options = $.extend({}, $.fn.radio.defaults, options);
+      $el.before(this.options.template);
       this.setState();
-    }   
-    
-  , setState: function () {    
+    }
+
+  , setState: function () {
       var $el = this.$element
         , $parent = $el.closest('.radio');
-        
-        $el.prop('disabled') && $parent.addClass('disabled');   
+
+        $el.prop('disabled') && $parent.addClass('disabled');
         $el.prop('checked') && $parent.addClass('checked');
-    } 
-    
-  , toggle: function () {    
+    }
+
+  , toggle: function () {
       var d = 'disabled'
         , ch = 'checked'
         , $el = this.$element
         , checked = $el.prop(ch)
-        , $parent = $el.closest('.radio')      
+        , $parent = $el.closest('.radio')
         , $parentWrap = $el.closest('form').length ? $el.closest('form') : $el.closest('body')
         , $elemGroup = $parentWrap.find(':radio[name="' + $el.attr('name') + '"]')
         , e = $.Event('toggle')
-      
+
         if ($el.prop(d) == false) {
             $elemGroup.not($el).each(function () {
               var $el = $(this)
                 , $parent = $(this).closest('.radio');
-                
+
                 if ($el.prop(d) == false) {
                   $parent.removeClass(ch) && $el.removeAttr(ch).trigger('change');
-                } 
+                }
             });
-            
+
             if (checked == false) $parent.addClass(ch) && $el.prop(ch, true);
             $el.trigger(e);
-          
+
             if (checked !== $el.prop(ch)) {
-                $el.trigger('change'); 
+                $el.trigger('change');
             }
-        }               
-    } 
-     
-  , setCheck: function (option) {    
+        }
+    }
+
+  , setCheck: function (option) {
       var ch = 'checked'
         , $el = this.$element
         , $parent = $el.closest('.radio')
@@ -69,22 +69,22 @@
         , $parentWrap = $el.closest('form').length ? $el.closest('form') : $el.closest('body')
         , $elemGroup = $parentWrap.find(':radio[name="' + $el['attr']('name') + '"]')
         , e = $.Event(option)
-        
+
       $elemGroup.not($el).each(function () {
         var $el = $(this)
           , $parent = $(this).closest('.radio');
-          
+
           $parent.removeClass(ch) && $el.removeAttr(ch);
       });
-            
+
       $parent[checkAction ? 'addClass' : 'removeClass'](ch) && checkAction ? $el.prop(ch, ch) : $el.removeAttr(ch);
-      $el.trigger(e);  
-          
+      $el.trigger(e);
+
       if (checked !== $el.prop(ch)) {
-        $el.trigger('change'); 
+        $el.trigger('change');
       }
-    }  
-     
+    }
+
   }
 
 
@@ -101,10 +101,10 @@
       if (!data) $this.data('radio', (data = new Radio(this, options)));
       if (option == 'toggle') data.toggle()
       if (option == 'check' || option == 'uncheck') data.setCheck(option)
-      else if (option) data.setState(); 
+      else if (option) data.setState();
     });
   }
-  
+
   $.fn.radio.defaults = {
     template: '<span class="icons"><span class="first-icon fa fa-circle-o fa-base"></span><span class="second-icon fa fa-dot-circle-o fa-base"></span></span>'
   }
@@ -128,7 +128,7 @@
     if (!$radio.hasClass('radio')) $radio = $radio.closest('.radio');
     $radio.find(':radio').radio('toggle');
   });
-  
+
   $(function () {
     $('[data-toggle="radio"]').each(function () {
       var $radio = $(this);
@@ -137,4 +137,3 @@
   });
 
 }(window.jQuery);
-

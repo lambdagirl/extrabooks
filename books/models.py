@@ -12,15 +12,12 @@ from .location import get_city_location
 class Category(models.Model): # The Category table name that inherits models.Model
     name = models.CharField(max_length=100) #Like a varchar
     slug = models.SlugField(unique=True)
-
     class Meta:
         ordering = ('name',)
         verbose_name = 'category'
         verbose_name_plural = 'categories'
-
     def get_absolute_url(self):
         return reverse('books:book_list', args =[str(self.slug)])
-
     def __str__(self):
         return self.name #name to be shown when called
 
@@ -37,7 +34,7 @@ class Book(models.Model):
     description = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
     isbn = models.CharField('ISBN', max_length=14, help_text='13 Character')
     price = models.DecimalField(max_digits=10,decimal_places=2)
-    tags= TaggableManager()
+    tags= TaggableManager(blank=True)
     city = models.CharField(max_length=50)
     location = PointField(null=True,blank=True)
     picture = models.ImageField(upload_to = user_directory_path,

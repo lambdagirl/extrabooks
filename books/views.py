@@ -54,14 +54,14 @@ class BookSearchMixin:
 
 class BookListView(BookSearchMixin,ListView):
     model = Book
-    tag = None
+    #tag = None
     queryset = model.objects.order_by('-date')
     select_related = ("seller", "category")
     template_name = 'books/book_list.html'
 
+
 def book_list_by_tag(request,tag_slug=None):
     tag = None
-    print(tag_slug)
     tag = get_object_or_404(Tag, slug=tag_slug)
     book_list = Book.objects.filter(tags__in=[tag])
     return render(request, 'books/book_list.html', {'book_list':book_list,

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'payment.apps.PaymentConfig',
     'chat.apps.ChatConfig',
+    'review.apps.ReviewConfig',
 
 ]
 

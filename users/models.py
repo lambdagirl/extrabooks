@@ -46,6 +46,7 @@ class Contact(models.Model):
 	from_user = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="from_user")
 	to_user = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="to_user")
 
+
 CustomUser.add_to_class(
     'following',
     models.ManyToManyField(

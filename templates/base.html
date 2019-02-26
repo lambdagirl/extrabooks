@@ -7,18 +7,18 @@
 		<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'>
 		<meta name="viewport" content="width=device-width">
 		<title>{% block title_tag %}ExtraBooks{% endblock %}</title>
-		<!-- fonts -->
-		<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-		<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+		{% block stylesheets %}
+			<!-- fonts -->
+			<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+			<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+			<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
 
-		<!-- stylesheets -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="{% static 'css/ct-paper.css' %}">
-		<link rel="stylesheet" href="{% static 'css/books.css' %}">
-		<link rel="stylesheet" href="{% static 'css/examples.css' %}">
-		<link rel="stylesheet" href="{% static 'css/style.css' %}">
-
+			<!-- stylesheets -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+			<link rel="stylesheet" href="{% static 'css/ct-paper.css' %}">
+			<link rel="stylesheet" href="{% static 'css/books.css' %}">
+			<link rel="stylesheet" href="{% static 'css/style.css' %}">
+		{% endblock stylesheets %}
 	</head>
 	<body>
 		<nav class="navbar navbar-ct-danger navbar-fixed-top" role="navigation" id="navbar">
@@ -33,12 +33,10 @@
 					</button>
 					<a class="navbar-brand" href="/">
 						<div class="logo-container">
-							<div class="logo"><img src="{% static 'img/icons/logo.png' %}"></div>
 							<p class="brand">ExtraBooks</p>
 						</div>
 					</a>
 				</div>
-
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="navigation-2">
 					<ul class="nav navbar-nav navbar-right">
@@ -46,12 +44,12 @@
 						Hi <a href="{% url 'settings' user.slug %}">{{ user.username }}</a>!
 						<li>
 								<form action="{% url 'books:book_list' %}" method="GET">
-									<input type="search" name="q">
-									<button type = "submit" class="btn btn-fill btn-primary btn-sm">Search</button>
+									<input type="text" name="q" value placeholder="search" class="form-control">
 								</form>
 							</li>
 							<li>
 									<form action="{% url 'books:get_distance' %}" method="GET">
+										<input type="text" name="city" value placeholder="city,location" class="form-control">
 									</form>
 								</li>
 						<li><a href="{% url 'books:book_new_by_ISBN' %}" class="btn btn-danger btn-fill btn-sm" data-toggle="modal" >Sell Books</a></li>
