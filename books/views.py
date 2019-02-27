@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView,DeleteView,CreateView
-from .models import Book, Category
+from .models import Book, Category, Images
 from django.urls import reverse_lazy
 from users.models import CustomUser
 from django.shortcuts import render,redirect
@@ -9,7 +9,7 @@ from django.http import Http404,HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from taggit.models import Tag
 import sys,redis,isbntools
-from .forms import BookCreatebyISBNForm,BookCreatebyISBNForm2
+from .forms import BookCreatebyISBNForm,BookCreatebyISBNForm2, ImageFormSet
 from isbnlib import meta
 from isbnlib.registry import bibformatters,PROVIDERS
 from isbnlib._desc import goo_desc
@@ -24,6 +24,7 @@ import urllib,os
 from django.core.files import File
 from .location import get_city_location
 from django.contrib.gis.db.models.functions import Distance
+from django.contrib import messages
 
 #connect to redis
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
@@ -92,7 +93,10 @@ class BookDetailView(DetailView):
         context["total_views"] = r.incr('context.book:{}:views'.format(context['book'].id))
         #increment book ranking by 1
         r.zincrby('book_ranking',context['book'].id,1)
+        book = kwargs["object"]
+        context['images'] = Images.objects.filter(book__name = book)
         return context
+
 
 class BookDeleteView(LoginRequiredMixin,UserPassesTestMixin, SuccessMessageMixin,DeleteView):
     model = Book
@@ -147,12 +151,15 @@ def book_create_by_ISBN_2(request):
     form = BookCreatebyISBNForm2(request.GET)
     isbn = request.session['isbn']
     name = (meta(isbn)['Title'])
-    picture_url = (cover(isbn)['thumbnail'])
     description = (goo_desc(isbn))
+    picture_url = (cover(isbn)['thumbnail'])
     result = urllib.request.urlretrieve(picture_url)
+
     if request.method == 'POST':
         form = BookCreatebyISBNForm2(request.POST)
-        if form.is_valid():
+        formset = ImageFormSet(request.POST, request.FILES,
+                               queryset=Images.objects.none())
+        if form.is_valid() and formset.is_valid():
             book=Book(name =name,
                         isbn= isbn,
                         picture = picture_url[10:],
@@ -162,12 +169,25 @@ def book_create_by_ISBN_2(request):
                         city = form.cleaned_data['city'],
                         condition = form.cleaned_data['condition'],
                         seller = request.user)
-            book.picture.save(
+            if result:
+                book.picture.save(
                         os.path.basename(picture_url),
                         File(open(result[0], 'rb')))
             book.save()
+            for form in formset.cleaned_data:
+                #this helps to not crash if the user
+                #do not upload all the photos
+                if form:
+                    image = form['image']
+                    photo = Images(book=book, image=image)
+                    photo.save()
+            messages.success(request, 'Your book was created.') # ignored
         return redirect(book.get_absolute_url())
+    else:
+        form = BookCreatebyISBNForm2()
+        formset = ImageFormSet(queryset=Images.objects.none())
     return render(request,'books/book_by_isbn.html', {'form':form,
+                                                        'formset':formset,
                                                     'isbn':isbn,
                                                     'name': name,
                                                     'picture':picture_url,

@@ -13,8 +13,24 @@
 		<p>{{ isbn }} </p>
 		<p>{{ description }}</p>
 </div>
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-	{{ form.as_p }}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+
+	{% for field in form %}
+	<tr>
+				 <th>{{ field.label_tag }}</th>
+				 <td>
+					 {{ field.errors }}
+					 {{ field }}
+					 {{ field.help_text }}
+				 </td>
+			 </tr>
+			 	{% endfor %}
+
+	{{ formset.management_form }}
+		{% for form in formset %}
+		{{ form }}
+		{% endfor %}
 	<button>Sell this book</button>
 </form>
 
