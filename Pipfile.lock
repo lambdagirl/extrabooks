@@ -260,13 +260,7 @@
             "index": "pypi",
             "version": "==0.24.0"
         },
-        "gdal": {
-            "hashes": [
-                "sha256:b725a580e6faa0bc17edc3e6caa1da9e6efc401fab19e8482631ee179132b4df"
-            ],
-            "index": "pypi",
-            "version": "==2.4.0"
-        },
+
         "geographiclib": {
             "hashes": [
                 "sha256:635da648fce80a57b81b28875d103dacf7deb12a3f5f7387ba7d39c51e096533"
