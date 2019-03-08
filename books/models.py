@@ -26,9 +26,15 @@ def user_directory_path(instance, filename):
     filename = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
     # return the whole path to the file
     return os.path.join( "book_images", filename)
-
+def user_directory_path2(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
+    # return the whole path to the file
+    return os.path.join( "book_thumbnail", filename)
 
 class Book(models.Model):
+    rating = models.DecimalField(max_digits=3,decimal_places=2, default=0,null = True)
+    rating_counts = models.PositiveIntegerField( default=0, null = True)
     name = models.CharField(max_length=100, verbose_name= "Title")
     date = models.DateTimeField(auto_now_add = True)
     description = models.TextField(max_length=1000,help_text='Enter a brief description of the book')
@@ -67,8 +73,13 @@ class Book(models.Model):
     def __str__(self) -> str:
                 return self.name
 
-class Images(models.Model):
+class BookImage(models.Model):
     book = models.ForeignKey(Book, default=None, on_delete = models.CASCADE)
-    image = models.ImageField(upload_to=user_directory_path,
+    image = models.ImageField(
+            upload_to=user_directory_path,
             null=True,
             blank=True)
+    thumbnail = models.ImageField(
+            upload_to=user_directory_path2,
+            null=True)
+

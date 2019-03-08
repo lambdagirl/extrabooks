@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Images
+from .models import Book, BookImage
 from django.forms.models import modelformset_factory
 
 class BookCreatebyISBNForm(forms.Form):
@@ -10,12 +10,10 @@ class BookCreatebyISBNForm2(forms.ModelForm):
         model = Book
         fields = ('price','category','city', 'condition')
 
-
 class ImageForm(forms.ModelForm):
     image = forms.ImageField(label='Image')
     class Meta:
-        model = Images
+        model = BookImage
         fields = ('image', )
 
-
-ImageFormSet = modelformset_factory(Images,form=ImageForm, extra=3)
+ImageFormSet = modelformset_factory(BookImage,form=ImageForm, extra=2)

@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView,DeleteView,CreateView
-from .models import Book, Category, Images
+from .models import Book, Category, BookImage
 from django.urls import reverse_lazy
 from users.models import CustomUser
 from django.shortcuts import render,redirect
@@ -10,10 +10,8 @@ from django.shortcuts import get_object_or_404
 from taggit.models import Tag
 import sys,redis,isbntools
 from .forms import BookCreatebyISBNForm,BookCreatebyISBNForm2, ImageFormSet
-from isbnlib import meta
-from isbnlib.registry import bibformatters,PROVIDERS
-from isbnlib._desc import goo_desc
-from isbnlib._cover import cover
+from .googlebookapi import get_book_by_isbn
+from .goodread import get_rating_by_isbn
 from django.conf import settings
 from actions.utils import create_action
 from django.contrib.messages.views import SuccessMessageMixin
@@ -41,7 +39,6 @@ else:
 session_opts = { 'session.type': 'redis', 'session.url':
                 redis_url, 'session.data_dir': './cache/',
                 'session.key': 'appname', 'session.auto': True, }
-
 
 class BookSearchMixin:
     def get_queryset(self):
@@ -94,7 +91,7 @@ class BookDetailView(DetailView):
         #increment book ranking by 1
         r.zincrby('book_ranking',context['book'].id,1)
         book = kwargs["object"]
-        context['images'] = Images.objects.filter(book__name = book)
+        context['images'] = BookImage.objects.filter(book__name = book)
         return context
 
 
@@ -150,20 +147,24 @@ def book_create_by_ISBN(request):
 def book_create_by_ISBN_2(request):
     form = BookCreatebyISBNForm2(request.GET)
     isbn = request.session['isbn']
-    name = (meta(isbn)['Title'])
-    description = (goo_desc(isbn))
-    picture_url = (cover(isbn)['thumbnail'])
+    book_object = get_book_by_isbn(isbn)
+    name = book_object['title']
+    description = book_object['description']
+    picture_url = book_object['thumbnail']
     result = urllib.request.urlretrieve(picture_url)
-
+    rating = get_rating_by_isbn(isbn)['average_rating']
+    ratings_count = get_rating_by_isbn(isbn)['ratings_count']
     if request.method == 'POST':
         form = BookCreatebyISBNForm2(request.POST)
         formset = ImageFormSet(request.POST, request.FILES,
-                               queryset=Images.objects.none())
+                               queryset=BookImage.objects.none())
         if form.is_valid() and formset.is_valid():
             book=Book(name =name,
                         isbn= isbn,
                         picture = picture_url[10:],
                         description = description,
+                        rating = rating,
+                        rating_counts = ratings_count,
                         category = form.cleaned_data['category'],
                         price = form.cleaned_data['price'],
                         city = form.cleaned_data['city'],
@@ -179,19 +180,21 @@ def book_create_by_ISBN_2(request):
                 #do not upload all the photos
                 if form:
                     image = form['image']
-                    photo = Images(book=book, image=image)
+                    photo = BookImage(book=book, image=image)
                     photo.save()
             messages.success(request, 'Your book was created.') # ignored
         return redirect(book.get_absolute_url())
     else:
         form = BookCreatebyISBNForm2()
-        formset = ImageFormSet(queryset=Images.objects.none())
+        formset = ImageFormSet(queryset=BookImage.objects.none())
     return render(request,'books/book_by_isbn.html', {'form':form,
                                                         'formset':formset,
                                                     'isbn':isbn,
                                                     'name': name,
                                                     'picture':picture_url,
-                                                    'description':description})
+                                                    'description':description,
+                                                    'rating':rating,
+                                                    'ratings_count':ratings_count})
 
 class BookListbyCategoryView(ListView):
     model = Category

@@ -26,10 +26,7 @@
 									 <img src='{{ image.image.url }}' width="200px" alt="Awesome Image" class="img-rounded  img-responsive" />
 							 </div>
 							 {% endfor %}
-
-
 							{% endif %}
-
 					</div>
 
 					<!-- Controls -->
@@ -57,10 +54,12 @@
 			<p> Posted at {{object.date|naturaltime}} in <a href="{% url 'books:book_list_category' book.category.slug %}">{{object.category}}</a> {{ object.get_condition_display }}</p>
 
 			<p>{{ object.isbn }} </p>
-			<Paragraph>{{ object.description }}</Paragraph>
-			<p>{{ object.price }}</p>
+			<p>{{ object.description }}</p>
+			<p>$ {{ object.price }}</p>
+			<p>Rating: {{ object.rating }}</p>
+			<p>Rating count:{{ object.rating_counts }}</p>
 
-
+			
 {% if user.is_authenticated and book.seller == user %}
 <p> <a href="{% url 'books:book_edit' book.pk %}"> Edit </a> |
 		<a href="{% url 'books:book_delete' book.pk %}">Delete </a></p>

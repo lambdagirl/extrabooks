@@ -23,10 +23,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'saxx*8^cib1va1%w70yj5j3oge=pgj%q=ug=qwtp+%-s7_wpn+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['extrabooks.com', 'localhost','127.0.0.1','extrabook.herokuapp.com']
 
+
+X_FRAME_OPTIONS ='DENY'
+CSRF_COOKIE_SECURE=True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_CONTENT_TYPE_NOSNIFF =True
+SECURE_SSL_REDIRECT=True
+SECURE_HSTS_SECONDS = 900
+SECURE_HSTS_PRELOAD =True
+SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+SECURE_BROWSER_XSS_FILTER =True
 
 # Application definition
 
